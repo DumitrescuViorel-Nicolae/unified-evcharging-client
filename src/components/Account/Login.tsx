@@ -30,6 +30,7 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
 
     if (response.flag === true) {
       auth.setToken(response.token);
+      toast.success(response.message);
     } else {
       toast.error(response.message);
     }
