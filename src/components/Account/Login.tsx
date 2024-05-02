@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "../../AuthContext";
-import axios from "axios";
-import { LoginResponse } from "../../interfaces/LoginResponse";
-import { toast } from "react-toastify";
+import createSelectors from "../../store/createSelectors";
+import authStore from "../../store/UserStore/authStore";
 
 interface LoginProps {
   setIsOpen: (open: boolean) => void;
@@ -10,31 +8,13 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
-  const auth = useAuth();
+  const useAuthStore = createSelectors(authStore);
+  const login = useAuthStore.use.login();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    //const apiURL = import.meta.env.BASE_SERVER_URL;
-    const apiURL = " https://localhost:7084";
-    const dataBody = {
-      email: username,
-      password: password,
-    };
-    let response: LoginResponse = { flag: false, message: "", token: "" };
-    try {
-      response = (await axios.post(`${apiURL}/api/Auth/login`, dataBody)).data;
-    } catch (error: unknown) {
-      toast.error(`Axios error occured ${error}`);
-    }
-
-    if (response.flag === true) {
-      auth.setToken(response.token);
-      toast.success(response.message);
-    } else {
-      toast.error(response.message);
-    }
-
+    login(username, password);
     onClose();
   };
 

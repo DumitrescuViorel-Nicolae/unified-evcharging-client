@@ -10,7 +10,6 @@ const NavBar = () => {
   const handleInputSearch = (searchString: string) => {
     setInputSearch(searchString);
   };
-  console.log(inputSearch);
   const [isOpen, setIsOpen] = useState(false);
 
   return (

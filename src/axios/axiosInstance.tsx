@@ -1,4 +1,6 @@
 import axios from "axios";
+import createSelectors from "../store/createSelectors";
+import authStore from "../store/UserStore/authStore";
 
 const axiosInstance = axios.create({
   baseURL: "https://localhost:7084",
@@ -7,7 +9,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const jwtToken = localStorage.getItem("jwtToken");
+    const useAuthStore = createSelectors(authStore);
+    const jwtToken = useAuthStore.use.token();
     if (jwtToken) {
       config.headers.Authorization = `Bearer ${jwtToken}`;
     }
