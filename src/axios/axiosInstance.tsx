@@ -1,16 +1,15 @@
 import axios from "axios";
-import createSelectors from "../store/createSelectors";
 import authStore from "../store/UserStore/authStore";
 
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:7084",
+  baseURL: "https://localhost:7084/api",
   timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const useAuthStore = createSelectors(authStore);
-    const jwtToken = useAuthStore.use.token();
+    const jwtToken = authStore.getState().token;
+    console.log("token from store", jwtToken);
     if (jwtToken) {
       config.headers.Authorization = `Bearer ${jwtToken}`;
     }

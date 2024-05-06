@@ -1,5 +1,13 @@
 export interface GeneralResponse<T = null> {
-  Success: boolean;
-  Message: string;
-  Data: T | null;
+  success: boolean;
+  message: string;
+  data: T | null;
+}
+
+export interface ErrorResponse {
+  data: {
+    errors: {
+      [key: string]: string[];
+    };
+  };
 }
