@@ -44,6 +44,7 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
       set({ token: data });
       set({ isLoggedIn: true });
       set({ userMail: email });
+
       accountStore.getState().getUser(email);
       toast.success("Logged in successfull!");
     } catch (error) {

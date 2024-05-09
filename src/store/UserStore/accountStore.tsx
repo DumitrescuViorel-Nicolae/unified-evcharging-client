@@ -4,7 +4,6 @@ import axiosInstance from "../../axios/axiosInstance";
 import { handleAxiosError } from "../../utils/errorParsing";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "react-router-dom";
-import { toast } from "react-toastify";
 
 export interface AccountStore {
   user: User;
@@ -32,7 +31,6 @@ const accountStore = createStore<AccountStore>((set) => ({
       );
       const user = response.data;
       set({ user: user });
-      toast.success("User got!");
     } catch (error) {
       const axiosError = error as AxiosError<ErrorResponse>;
       handleAxiosError(axiosError);

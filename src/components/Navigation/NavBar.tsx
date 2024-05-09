@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Image, Input, Button, Flex, Text, Icon } from "@chakra-ui/react";
-import { BiUser } from "react-icons/bi";
+import { Image, Input, Button, Flex, Icon } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import Login from "../Account/Login";
 import logo from "../../assets/logo.png";
+import UserStateCases from "./UserStateCases";
+import createSelectors from "../../store/createSelectors";
+import authStore from "../../store/UserStore/authStore";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
+  // STORES
+  const useAuthStore = createSelectors(authStore);
+
+  // USING
+  const isLoggendIn = useAuthStore.use.isLoggedIn();
+
+  // LOCAL STATE
   const [inputSearch, setInputSearch] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const handleInputSearch = (searchString: string) => {
     setInputSearch(searchString);
@@ -28,7 +38,14 @@ const NavBar = () => {
       >
         {/* Left */}
         <Flex align="center">
-          <Image src={logo} alt="Logo" boxSize={"100px"} borderRadius="full" />
+          <Link to="/">
+            <Image
+              src={logo}
+              alt="Logo"
+              boxSize={"100px"}
+              borderRadius="full"
+            />
+          </Link>
         </Flex>
 
         {/* Middle */}
@@ -50,23 +67,14 @@ const NavBar = () => {
           <Button fontSize="15px" mr="8">
             Add EV Charger
           </Button>
-          <Button
-            onClick={() => setIsOpen(true)}
-            bg="#1f8526"
-            color="white"
-            fontWeight="bold"
-            rounded="full"
-            p="2"
-            border="1px"
-            borderColor="transparent"
-            _hover={{ bg: "#0c270b" }}
-          >
-            <Text mr="2">Sign in</Text>
-            <Icon as={BiUser} fontSize="22px" />
-          </Button>
+          <UserStateCases
+            isLoggedIn={isLoggendIn}
+            setIsLoginOpen={setIsLoginOpen}
+          />
         </Flex>
       </Flex>
-      <Login isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* Modals */}
+      <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
     </>
   );
 };
