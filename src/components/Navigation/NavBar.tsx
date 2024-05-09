@@ -54,6 +54,10 @@ const NavBar = () => {
             type="search"
             placeholder="Search"
             value={inputSearch}
+            borderColor={"green"}
+            color={"green"}
+            _placeholder={{ color: "inherit" }}
+            focusBorderColor="#27961f"
             size={"lg"}
             onChange={(e) => handleInputSearch(e.target.value)}
           />
