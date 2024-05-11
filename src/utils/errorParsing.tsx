@@ -2,8 +2,9 @@ import { AxiosError } from "axios";
 import { ErrorResponse } from "../interfaces/GeneralResponse";
 import { toast } from "react-toastify";
 
-export function handleAxiosError(error: AxiosError<ErrorResponse>) {
-  const errorData = error.response?.data.errors as
+export function handleAxiosError(error) {
+  const axiosError = error as AxiosError<ErrorResponse>;
+  const errorData = axiosError.response?.data.errors as
     | Record<string, string[]>
     | undefined;
 

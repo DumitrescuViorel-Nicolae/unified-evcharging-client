@@ -2,8 +2,6 @@ import { createStore } from "zustand";
 import { User, UserState } from "../../interfaces/User";
 import axiosInstance from "../../axios/axiosInstance";
 import { handleAxiosError } from "../../utils/errorParsing";
-import { AxiosError } from "axios";
-import { ErrorResponse } from "react-router-dom";
 
 export interface AccountStore {
   user: User;
@@ -32,8 +30,7 @@ const accountStore = createStore<AccountStore>((set) => ({
       const user = response.data;
       set({ user: user });
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      handleAxiosError(axiosError);
+      handleAxiosError(error);
     }
   },
   clearUser: () =>

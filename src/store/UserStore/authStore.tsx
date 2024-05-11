@@ -1,11 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { createStore } from "zustand";
 import { User } from "../../interfaces/User";
-import {
-  ErrorResponse,
-  GeneralResponse,
-} from "../../interfaces/GeneralResponse";
+import { GeneralResponse } from "../../interfaces/GeneralResponse";
 import axiosBasic from "../../axios/axiosBasic";
 import { handleAxiosError } from "../../utils/errorParsing";
 import accountStore from "./accountStore";
@@ -48,8 +45,7 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
       accountStore.getState().getUser(email);
       toast.success("Logged in successfull!");
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      handleAxiosError(axiosError);
+      handleAxiosError(error);
     }
   },
 
@@ -60,8 +56,7 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
         toast.success("User registered!");
       }
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      handleAxiosError(axiosError);
+      handleAxiosError(error);
     }
   },
 }));
