@@ -1,7 +1,7 @@
 import { createStore } from "zustand";
 import { EVStation } from "../../interfaces/EVStation";
-import axiosInstance from "../../axios/axiosInstance";
 import { handleAxiosError } from "../../utils/errorParsing";
+import axiosBasic from "../../axios/axiosBasic";
 
 export interface EVStationStore {
   evStations: EVStation[];
@@ -12,9 +12,7 @@ const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
   getEVStation: async () => {
     try {
-      const response = await axiosInstance.get(
-        "/EVStation/getEVInfrastructure"
-      );
+      const response = await axiosBasic.get("/EVStation/getEVInfrastructure");
       console.log(response);
       set({ evStations: response.data });
     } catch (error) {
