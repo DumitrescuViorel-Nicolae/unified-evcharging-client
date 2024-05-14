@@ -12,6 +12,8 @@ export const HomePage = () => {
   const getEVStations = useEVStationStore.use.getEVStation();
   const evStations = useEVStationStore.use.evStations();
 
+  // LOCAL STATE
+
   useEffect(() => {
     getEVStations();
   }, []);

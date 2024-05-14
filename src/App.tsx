@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { HomePage } from "./components/Navigation/Home";
 import History from "./components/Account/History";
+import LoadingScreen from "./components/Common/LoadingScreen";
 
 const colors = {
   primary: {
@@ -34,6 +35,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <Router>
         <NavBar />
+        <LoadingScreen />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/history" element={<History />} />

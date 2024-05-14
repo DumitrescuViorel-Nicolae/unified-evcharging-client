@@ -1,8 +1,35 @@
 import axios from "axios";
+import appStateStore from "../store/CommonStore/appStateStore";
 
 const axiosBasic = axios.create({
   baseURL: "https://localhost:7084/api",
   timeout: 10000,
 });
+
+axiosBasic.interceptors.request.use(
+  (config) => {
+    // Set loading state to true before sending the request
+    console.log("here");
+    appStateStore.getState().setIsLoading(true);
+    console.log("after here");
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosBasic.interceptors.response.use(
+  (response) => {
+    // Set loading state to false after receiving the response
+    appStateStore.getState().setIsLoading(false);
+    return response;
+  },
+  (error) => {
+    // Set loading state to false if there's an error
+    appStateStore.getState().setIsLoading(false);
+    return Promise.reject(error);
+  }
+);
 
 export default axiosBasic;
