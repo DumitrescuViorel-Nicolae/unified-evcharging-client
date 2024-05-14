@@ -29,7 +29,7 @@ const NavBar = () => {
         as="nav"
         borderBottom="1px"
         borderColor="gray.200"
-        bg="gray.100"
+        bg="complementary.300"
         px={{ base: "6", md: "10", lg: "12" }}
         minWidth="max-content"
         p="1.25"
@@ -54,21 +54,20 @@ const NavBar = () => {
             type="search"
             placeholder="Search"
             value={inputSearch}
-            borderColor={"green"}
-            color={"green"}
-            _placeholder={{ color: "inherit" }}
-            focusBorderColor="#27961f"
+            borderColor={"accent.100"}
+            color="accent.100"
+            focusBorderColor="accent.100"
             size={"lg"}
             onChange={(e) => handleInputSearch(e.target.value)}
           />
-          <Button bg="#27961f" color="white" ml="2" rounded="full" p="2">
+          <Button bg="accent.100" ml="2" rounded="full" p="2">
             <Icon boxSize={6} as={FiSearch} />
           </Button>
         </Flex>
 
         {/* Right */}
         <Flex align="center">
-          <Button fontSize="15px" mr="8">
+          <Button bg={"accent.100"} fontSize="15px" mr="8">
             Add EV Charger
           </Button>
           <UserStateCases

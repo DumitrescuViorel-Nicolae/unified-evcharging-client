@@ -25,7 +25,7 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({
       <Menu>
         <MenuButton
           as={Button}
-          bg="#1f8526"
+          bg="accent.100"
           color="white"
           fontWeight="bold"
           rounded="full"
@@ -56,8 +56,7 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({
     return (
       <Button
         onClick={() => setIsLoginOpen(true)}
-        bg="#1f8526"
-        color="white"
+        bg="accent.100"
         fontWeight="bold"
         rounded="full"
         p="2"

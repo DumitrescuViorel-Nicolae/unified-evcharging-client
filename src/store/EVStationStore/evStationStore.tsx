@@ -13,7 +13,6 @@ const evStationStore = createStore<EVStationStore>((set) => ({
   getEVStation: async () => {
     try {
       const response = await axiosBasic.get("/EVStation/getEVInfrastructure");
-      console.log(response);
       set({ evStations: response.data });
     } catch (error) {
       handleAxiosError(error);

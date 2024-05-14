@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const jwtToken = authStore.getState().token;
-    console.log("token from store", jwtToken);
     if (jwtToken) {
       config.headers.Authorization = `Bearer ${jwtToken}`;
     }

@@ -20,7 +20,7 @@ interface StationCardProps {
 
 const StationCard: React.FC<StationCardProps> = ({ station }) => {
   const colorScheme = {
-    bg: "black",
+    bg: "complementary.300",
     border: "gray.700",
     text: "white",
     badge: "teal",
@@ -92,8 +92,12 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         </Collapse>
         <Divider />
         <Box className="text-center">
-          <Button className="mt-4 mx-auto">Pay</Button>
-          <Button className="mt-4 mx-auto ml-2">Navigate</Button>
+          <Button bg={"accent.100"} className="mt-4 mx-auto">
+            Pay
+          </Button>
+          <Button bg={"accent.100"} className="mt-4 mx-auto ml-2">
+            Navigate
+          </Button>
         </Box>
       </CardBody>
     </Card>
