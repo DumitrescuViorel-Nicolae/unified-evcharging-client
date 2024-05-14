@@ -29,82 +29,82 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
   // LOCAL STATE
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(true);
 
   const handleLogin = async () => {
     login(username, password);
     onClose();
   };
 
-  const handleToggleForm = (cancelled: boolean) => {
-    setShowLoginForm((prev) => {
-      if (cancelled) {
-        return false;
-      } else {
-        return !prev;
-      }
-    });
+  const handleToggleForm = () => {
+    setShowLoginForm((prev) => !prev);
   };
 
   const onClose = () => {
     setIsOpen(false);
-    handleToggleForm(true);
+    setShowLoginForm(true); // Reset to login form when closing modal
   };
 
-  const returnLogin = () => {
-    return (
-      <>
-        <Input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          mb={2}
-        />
-        <Input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          mb={4}
-        />
-      </>
-    );
-  };
-
-  const returnRegister = () => {
-    return (
-      <>
-        <RegistrationForm />
-      </>
-    );
+  const handleSwitchToRegister = () => {
+    setShowLoginForm(false); // Switch to register form
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{showLoginForm ? "Login" : "Register"}</ModalHeader>
+      <ModalContent bgColor={"complementary.300"}>
+        <ModalHeader color={"primary.600"}>
+          {showLoginForm ? "Login" : "Register"}
+        </ModalHeader>
         <ModalBody>
-          {showLoginForm ? returnLogin() : returnRegister()}
+          {showLoginForm ? (
+            <>
+              <Input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                colorScheme={"whiteAlpha"}
+                mb={2}
+              />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                mb={4}
+                colorScheme={"whiteAlpha"}
+              />
+              <Text
+                color={"primary.600"}
+                textAlign="center"
+                fontSize="sm"
+                mb={2}
+              >
+                Don't have an account?{" "}
+                <Button
+                  color={"accent.100"}
+                  variant="link"
+                  onClick={handleSwitchToRegister}
+                >
+                  Register here
+                </Button>
+              </Text>
+            </>
+          ) : (
+            <RegistrationForm />
+          )}
         </ModalBody>
-        {!showLoginForm && (
-          <Text textAlign="center" fontSize="sm" mt={2} mb={4}>
-            Already have an account?{" "}
-            <Button variant="link" onClick={(e) => handleToggleForm(false)}>
+        <ModalFooter>
+          {showLoginForm ? (
+            <Button bg={"accent.100"} mr={3} onClick={handleLogin}>
+              Login
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={handleToggleForm}>
               Switch to Login
             </Button>
-          </Text>
-        )}
-        <ModalFooter>
-          <Button
-            hidden={!showLoginForm}
-            colorScheme="green"
-            mr={3}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
+          )}
           <Button onClick={onClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
