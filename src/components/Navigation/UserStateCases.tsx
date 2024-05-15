@@ -26,13 +26,10 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({
         <MenuButton
           as={Button}
           bg="accent.100"
-          color="white"
-          fontWeight="bold"
           rounded="full"
           p="2"
           border="1px"
           borderColor="transparent"
-          _hover={{ bg: "#0c270b" }}
         >
           User Account
         </MenuButton>
@@ -57,12 +54,10 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({
       <Button
         onClick={() => setIsLoginOpen(true)}
         bg="accent.100"
-        fontWeight="bold"
         rounded="full"
         p="2"
         border="1px"
         borderColor="transparent"
-        _hover={{ bg: "#0c270b" }}
       >
         <Text mr="2">Log in</Text>
         <Icon as={BiUser} fontSize="22px" />

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Image, Input, Button, Flex, Icon } from "@chakra-ui/react";
-import { FiSearch } from "react-icons/fi";
+import { Image, Button, Flex } from "@chakra-ui/react";
 import Login from "../Account/Login";
 import logo from "../../assets/logo.png";
 import UserStateCases from "./UserStateCases";
 import createSelectors from "../../store/createSelectors";
 import authStore from "../../store/UserStore/authStore";
 import { Link } from "react-router-dom";
+import Filter from "./Filter";
 
 const NavBar = () => {
   // STORES
@@ -16,12 +16,7 @@ const NavBar = () => {
   const isLoggendIn = useAuthStore.use.isLoggedIn();
 
   // LOCAL STATE
-  const [inputSearch, setInputSearch] = useState("");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-  const handleInputSearch = (searchString: string) => {
-    setInputSearch(searchString);
-  };
 
   return (
     <>
@@ -49,21 +44,7 @@ const NavBar = () => {
         </Flex>
 
         {/* Middle */}
-        <Flex>
-          <Input
-            type="search"
-            placeholder="Search"
-            value={inputSearch}
-            borderColor={"accent.100"}
-            color="accent.100"
-            focusBorderColor="accent.100"
-            size={"lg"}
-            onChange={(e) => handleInputSearch(e.target.value)}
-          />
-          <Button bg="accent.100" ml="2" rounded="full" p="2">
-            <Icon boxSize={6} as={FiSearch} />
-          </Button>
-        </Flex>
+        <Filter />
 
         {/* Right */}
         <Flex align="center">
@@ -76,6 +57,7 @@ const NavBar = () => {
           />
         </Flex>
       </Flex>
+
       {/* Modals */}
       <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
     </>

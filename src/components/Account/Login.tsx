@@ -52,7 +52,7 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
       <ModalOverlay />
-      <ModalContent bgColor={"complementary.300"}>
+      <ModalContent bgColor={"complementary.300"} color={"primary.600"}>
         <ModalHeader color={"primary.600"}>
           {showLoginForm ? "Login" : "Register"}
         </ModalHeader>
@@ -101,7 +101,12 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
               Login
             </Button>
           ) : (
-            <Button variant="outline" onClick={handleToggleForm}>
+            <Button
+              bg={"accent.100"}
+              variant="solid"
+              mr={1}
+              onClick={handleToggleForm}
+            >
               Switch to Login
             </Button>
           )}

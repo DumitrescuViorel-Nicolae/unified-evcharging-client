@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
 
 const RegistrationForm = () => {
@@ -10,7 +10,9 @@ const RegistrationForm = () => {
     role: "N/A - Change if applicable",
   });
 
-  const handleChange = (e: ChangeEvent) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -32,7 +34,7 @@ const RegistrationForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form color="primary.600" onSubmit={handleSubmit}>
       <FormControl id="username" mb={4}>
         <FormLabel>Username</FormLabel>
         <Input
@@ -84,7 +86,7 @@ const RegistrationForm = () => {
           defaultValue={"User"}
         />
       </FormControl>
-      <Button type="submit" colorScheme="green">
+      <Button type="submit" bg={"accent.100"}>
         Register
       </Button>
     </form>
