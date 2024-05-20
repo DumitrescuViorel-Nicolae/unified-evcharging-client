@@ -63,7 +63,7 @@ const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
+                placeholder="Email"
                 colorScheme={"whiteAlpha"}
                 mb={2}
               />
