@@ -1,92 +1,163 @@
-import { FormEvent, useState } from "react";
-import { FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  FormErrorMessage,
+  SimpleGrid,
+  ScaleFade,
+} from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { RegistrationFormData } from "../../interfaces/RegistrationFormData ";
+
+const schema = yup.object().shape({
+  username: yup.string().required("Username is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+  phoneNumber: yup.string().required("Phone number is required"),
+  companyName: yup.string(),
+});
+
+const addConditionalFields = (companyName: string | undefined) => {
+  const conditionalFields: { [key: string]: any } = {};
+  if (companyName && !companyName.includes("N/A")) {
+    conditionalFields.registrationNumber = yup
+      .string()
+      .required("Registration Number is required");
+    conditionalFields.taxNumber = yup
+      .string()
+      .required("Tax Number is required");
+    conditionalFields.country = yup.string().required("Country is required");
+    conditionalFields.city = yup.string().required("City is required");
+    conditionalFields.streetName = yup
+      .string()
+      .required("Street Name is required");
+    conditionalFields.zip = yup.string().required("Zip is required");
+  }
+  return conditionalFields;
+};
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    email: "",
-    phoneNumber: "",
-    role: "N/A - Change if applicable",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<RegistrationFormData>({
+    resolver: yupResolver(schema),
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const companyName = watch("companyName");
+  const conditionalFields = addConditionalFields(companyName);
+  yup.object().shape({
+    ...schema.fields,
+    ...conditionalFields,
+  });
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    // Reset form fields after submission
-    setFormData({
-      username: "",
-      password: "",
-      email: "",
-      phoneNumber: "",
-      role: "",
-    });
+  const onSubmit = (data: RegistrationFormData) => {
+    console.log(data);
+    if (data.companyName !== "") {
+      // You can add your API call here to submit the form data
+      reset();
+    }
   };
 
   return (
-    <form color="primary.600" onSubmit={handleSubmit}>
-      <FormControl id="username" mb={4}>
+    <form color="primary.600" onSubmit={handleSubmit(onSubmit)}>
+      <FormControl isInvalid={!!errors.username} id="username" mb={4}>
         <FormLabel>Username</FormLabel>
-        <Input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
+        <Input type="text" {...register("username")} required />
+        <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl id="password" mb={4}>
+
+      <FormControl isInvalid={!!errors.password} id="password" mb={4}>
         <FormLabel>Password</FormLabel>
-        <Input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <Input type="password" {...register("password")} required />
+        <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl id="email" mb={4}>
+
+      <FormControl isInvalid={!!errors.email} id="email" mb={4}>
         <FormLabel>Email</FormLabel>
-        <Input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+        <Input type="email" {...register("email")} required />
+        <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl id="phoneNumber" mb={4}>
+
+      <FormControl isInvalid={!!errors.phoneNumber} id="phoneNumber" mb={4}>
         <FormLabel>Phone Number</FormLabel>
-        <Input
-          type="tel"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          required
-        />
+        <Input type="tel" {...register("phoneNumber")} required />
+        <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl id="role" mb={4}>
+
+      <FormControl isInvalid={!!errors.companyName} id="role" mb={4}>
         <FormLabel>Company</FormLabel>
         <Input
           type="text"
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
+          {...register("companyName")}
           required
-          defaultValue={"User"}
+          defaultValue={"N/A - Change if applicable"}
         />
+        <FormErrorMessage>{errors.companyName?.message}</FormErrorMessage>
       </FormControl>
-      <Button type="submit" bg={"accent.100"}>
+
+      {companyName && !companyName.includes("N/A") ? (
+        <ScaleFade in>
+          <SimpleGrid columns={2} spacing={4} mb={3}>
+            <FormControl
+              isInvalid={!!errors.registrationNumber}
+              id="registrationNumber"
+            >
+              <FormLabel>Registration Number</FormLabel>
+              <Input type="text" {...register("registrationNumber")} />
+              <FormErrorMessage>
+                {!!errors.registrationNumber?.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.taxNumber} id="taxNumber">
+              <FormLabel>Tax Number</FormLabel>
+              <Input type="text" {...register("taxNumber")} />
+              <FormErrorMessage>{!!errors.taxNumber?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.country} id="country">
+              <FormLabel>Country</FormLabel>
+              <Input type="text" {...register("country")} />
+              <FormErrorMessage>{!!errors.country?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.city} id="city">
+              <FormLabel>City</FormLabel>
+              <Input type="text" {...register("city")} />
+              <FormErrorMessage>{!!errors.city?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.streetName} id="streetName">
+              <FormLabel>Street Name</FormLabel>
+              <Input type="text" {...register("streetName")} />
+              <FormErrorMessage>
+                {!!errors.streetName?.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.zip} id="zip">
+              <FormLabel>Zip</FormLabel>
+              <Input type="text" {...register("zip")} />
+              <FormErrorMessage>{!!errors.zip?.message}</FormErrorMessage>
+            </FormControl>
+          </SimpleGrid>
+        </ScaleFade>
+      ) : null}
+
+      <Button type="submit" isLoading={isSubmitting} bg={"accent.100"}>
         Register
       </Button>
     </form>
