@@ -35,6 +35,9 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const onPay = (stripeId: string | null) => {
+    console.log(stripeId);
+  };
 
   return (
     <>
@@ -73,7 +76,11 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         <Divider />
         <CardBody>
           <Box className="text-center">
-            <Button bg={"accent.100"} className="mt-4 mx-auto">
+            <Button
+              onClick={() => onPay(station.stripeAccountID)}
+              bg={"accent.100"}
+              className="mt-4 mx-auto"
+            >
               Pay
             </Button>
             <Button bg={"accent.100"} className="mt-4 mx-auto ml-2">

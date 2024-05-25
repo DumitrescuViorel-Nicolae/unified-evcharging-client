@@ -6,13 +6,15 @@ import createSelectors from "../../store/createSelectors";
 import authStore from "../../store/UserStore/authStore";
 import { Link } from "react-router-dom";
 import Filter from "./Filter";
+import accountStore from "../../store/UserStore/accountStore";
 
 const NavBar = () => {
   // STORES
   const useAuthStore = createSelectors(authStore);
-
+  const useUserStore = createSelectors(accountStore);
   // USING
   const isLoggendIn = useAuthStore.use.isLoggedIn();
+  const user = useUserStore.use.user();
 
   return (
     <>
@@ -33,7 +35,8 @@ const NavBar = () => {
             <Image
               src={logo}
               alt="Logo"
-              boxSize={"100px"}
+              p={3}
+              boxSize={"90px"}
               borderRadius="full"
             />
           </Link>
@@ -44,7 +47,12 @@ const NavBar = () => {
 
         {/* Right */}
         <Flex align="center">
-          <Button bg={"accent.100"} fontSize="15px" mr="8">
+          <Button
+            hidden={user.role !== "Company"}
+            bg={"accent.100"}
+            fontSize="15px"
+            mr="8"
+          >
             Add EV Charger
           </Button>
           <UserStateCases isLoggedIn={isLoggendIn} />

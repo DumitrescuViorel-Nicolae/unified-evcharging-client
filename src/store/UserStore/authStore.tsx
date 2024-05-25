@@ -1,7 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { createStore } from "zustand";
-import { User } from "../../interfaces/User";
 import { GeneralResponse } from "../../interfaces/GeneralResponse";
 import axiosBasic from "../../axios/axiosBasic";
 import { handleAxiosError } from "../../utils/errorParsing";
