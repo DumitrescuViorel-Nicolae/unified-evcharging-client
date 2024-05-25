@@ -11,6 +11,9 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegistrationFormData } from "../../interfaces/RegistrationFormData ";
+import createSelectors from "../../store/createSelectors";
+import authStore from "../../store/UserStore/authStore";
+import appStateStore from "../../store/CommonStore/appStateStore";
 
 const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -22,7 +25,13 @@ const schema = yup.object().shape({
     .string()
     .min(6, "Password must be at least 6 characters long")
     .required("Password is required"),
-  phoneNumber: yup.string().required("Phone number is required"),
+  phoneNumber: yup
+    .string()
+    .matches(
+      /^(\(\d{3}\)\s|\d{3}-)\d{3}-\d{4}$/,
+      "Phone number is not valid (format: XXX-XXX-XXXX)"
+    )
+    .required("Phone number is required"),
   companyName: yup.string(),
 });
 
@@ -56,6 +65,13 @@ const RegistrationForm = () => {
     resolver: yupResolver(schema),
   });
 
+  // STORES
+  const useAuthStore = createSelectors(authStore);
+  const useAppStateStore = createSelectors(appStateStore);
+  const registerApi = useAuthStore.use.register();
+  const registerSucceeded = useAuthStore.use.registerSucceeded();
+  const setIsModalOpen = useAppStateStore.use.setIsAuthModalOpen();
+
   const companyName = watch("companyName");
   const conditionalFields = addConditionalFields(companyName);
   yup.object().shape({
@@ -64,9 +80,15 @@ const RegistrationForm = () => {
   });
 
   const onSubmit = (data: RegistrationFormData) => {
-    console.log(data);
-    if (data.companyName !== "") {
-      // You can add your API call here to submit the form data
+    if (data.taxNumber) {
+      data.role = "Company";
+    } else {
+      data.role = "User";
+    }
+    registerApi(data);
+    console.log(registerSucceeded);
+    if (registerSucceeded) {
+      setIsModalOpen(false);
       reset();
     }
   };
@@ -93,7 +115,15 @@ const RegistrationForm = () => {
 
       <FormControl isInvalid={!!errors.phoneNumber} id="phoneNumber" mb={4}>
         <FormLabel>Phone Number</FormLabel>
-        <Input type="tel" {...register("phoneNumber")} required />
+
+        <Input
+          type="tel"
+          inputMode="numeric"
+          maxLength={14}
+          placeholder="(XXX) XXX-XXXX or XXX-XXX-XXXX"
+          {...register("phoneNumber")}
+          required
+        />
         <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
       </FormControl>
 

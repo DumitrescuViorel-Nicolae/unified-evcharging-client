@@ -13,18 +13,17 @@ import {
 import createSelectors from "../../store/createSelectors";
 import authStore from "../../store/UserStore/authStore";
 import RegistrationForm from "./Register";
+import appStateStore from "../../store/CommonStore/appStateStore";
 
-interface LoginProps {
-  setIsOpen: (open: boolean) => void;
-  isOpen: boolean;
-}
-
-const Login: React.FC<LoginProps> = ({ setIsOpen, isOpen }) => {
+const Login: React.FC = () => {
   // STORES
   const useAuthStore = createSelectors(authStore);
+  const useAppStateStore = createSelectors(appStateStore);
 
   // USINGS
   const login = useAuthStore.use.login();
+  const isOpen = useAppStateStore.use.isAuthModalOpen();
+  const setIsOpen = useAppStateStore.use.setIsAuthModalOpen();
 
   // LOCAL STATE
   const [username, setUsername] = useState("");

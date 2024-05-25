@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Image, Button, Flex } from "@chakra-ui/react";
 import Login from "../Account/Login";
 import logo from "../../assets/logo.png";
@@ -14,9 +13,6 @@ const NavBar = () => {
 
   // USING
   const isLoggendIn = useAuthStore.use.isLoggedIn();
-
-  // LOCAL STATE
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
     <>
@@ -51,15 +47,12 @@ const NavBar = () => {
           <Button bg={"accent.100"} fontSize="15px" mr="8">
             Add EV Charger
           </Button>
-          <UserStateCases
-            isLoggedIn={isLoggendIn}
-            setIsLoginOpen={setIsLoginOpen}
-          />
+          <UserStateCases isLoggedIn={isLoggendIn} />
         </Flex>
       </Flex>
 
       {/* Modals */}
-      <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} />
+      <Login />
     </>
   );
 };

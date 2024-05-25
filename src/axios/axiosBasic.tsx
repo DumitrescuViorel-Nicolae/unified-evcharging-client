@@ -3,7 +3,7 @@ import appStateStore from "../store/CommonStore/appStateStore";
 
 const axiosBasic = axios.create({
   baseURL: "https://localhost:7084/api",
-  timeout: 10000,
+  timeout: 100000,
 });
 
 axiosBasic.interceptors.request.use(

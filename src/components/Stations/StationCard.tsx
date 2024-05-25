@@ -18,7 +18,6 @@ import {
   ModalFooter,
   useDisclosure,
   Flex,
-  Spacer,
 } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import React from "react";

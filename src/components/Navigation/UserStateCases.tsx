@@ -9,16 +9,17 @@ import {
 } from "@chakra-ui/react";
 import { BiUser, BiHistory, BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import createSelectors from "../../store/createSelectors";
+import appStateStore from "../../store/CommonStore/appStateStore";
 
 interface UserStateCasesProps {
   isLoggedIn: boolean;
-  setIsLoginOpen: (isOpen: boolean) => void;
 }
 
-const UserStateCases: React.FC<UserStateCasesProps> = ({
-  isLoggedIn,
-  setIsLoginOpen,
-}) => {
+const UserStateCases: React.FC<UserStateCasesProps> = ({ isLoggedIn }) => {
+  const useAppStateStore = createSelectors(appStateStore);
+  const setAuthModal = useAppStateStore.use.setIsAuthModalOpen();
+
   const returnUserAccount = () => {
     // Return a menu with user-related links
     return (
@@ -52,7 +53,7 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({
     // Return a login button
     return (
       <Button
-        onClick={() => setIsLoginOpen(true)}
+        onClick={() => setAuthModal(true)}
         bg="accent.100"
         rounded="full"
         p="2"

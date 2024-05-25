@@ -3,7 +3,8 @@ export interface RegistrationFormData {
   email: string;
   password: string;
   phoneNumber: string;
-  companyName: string;
+  companyName?: string;
+  role?: string;
   registrationNumber?: string;
   taxNumber?: string;
   country?: string;

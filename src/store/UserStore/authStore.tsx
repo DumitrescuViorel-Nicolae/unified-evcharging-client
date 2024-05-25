@@ -6,6 +6,8 @@ import { GeneralResponse } from "../../interfaces/GeneralResponse";
 import axiosBasic from "../../axios/axiosBasic";
 import { handleAxiosError } from "../../utils/errorParsing";
 import accountStore from "./accountStore";
+import { RegistrationFormData } from "../../interfaces/RegistrationFormData ";
+import appStateStore from "../CommonStore/appStateStore";
 
 interface AuthState {
   token: string | null;
@@ -14,11 +16,13 @@ interface AuthState {
 
 interface AuthActions {
   isLoggedIn: boolean;
+  registerSucceeded: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (user: User) => Promise<void>;
+  register: (user: RegistrationFormData) => Promise<void>;
 }
 
 const authStore = createStore<AuthState & AuthActions>((set) => ({
+  registerSucceeded: false,
   token: null,
   isLoggedIn: false,
   user: {
@@ -49,11 +53,16 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
     }
   },
 
-  register: async (user: User) => {
+  register: async (registrationData: RegistrationFormData) => {
     try {
-      const response = await axios.post("/register", { user });
-      if (response.data.Succeeded) {
+      const response = await axiosBasic.post("/Auth/register", {
+        ...registrationData,
+      });
+      if (response.data.success) {
         toast.success("User registered!");
+        appStateStore.getState().setIsAuthModalOpen(false);
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
       handleAxiosError(error);
