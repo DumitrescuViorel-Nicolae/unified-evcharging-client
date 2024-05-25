@@ -11,10 +11,10 @@ import Map from "./Map";
 
 const MapModal = ({ isOpen, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Map</ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Map isOpen={isOpen} onClose={onClose} />
