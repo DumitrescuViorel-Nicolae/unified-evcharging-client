@@ -6,6 +6,9 @@ export interface AppStateStore {
 
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
+
+  isPaymentModalOpen: boolean;
+  setIsPaymentModalOpen: (open: boolean) => void;
 }
 
 const appStateStore = createStore<AppStateStore>((set) => ({
@@ -16,6 +19,12 @@ const appStateStore = createStore<AppStateStore>((set) => ({
   isAuthModalOpen: false,
   setIsAuthModalOpen: (open) => {
     set({ isAuthModalOpen: open });
+  },
+
+  isPaymentModalOpen: false,
+  setIsPaymentModalOpen: (open) => {
+    console.log("clicked");
+    set({ isPaymentModalOpen: open });
   },
 }));
 

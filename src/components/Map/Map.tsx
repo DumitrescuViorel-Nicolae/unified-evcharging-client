@@ -1,30 +1,56 @@
-import React from "react";
-import ReactMapGL from "react-map-gl";
+import React, { useMemo } from "react";
+import ReactMapGL, { Marker } from "react-map-gl";
+import createSelectors from "../../store/createSelectors";
+import evStationStore from "../../store/EVStationStore/evStationStore";
+import { MdOutlineElectricCar } from "react-icons/md";
 
-interface MapProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const MapGL = () => {
+  const useEvStore = createSelectors(evStationStore);
+  const evStations = useEvStore.use.evStations();
 
-const Map: React.FC<MapProps> = ({ isOpen, onClose }) => {
+  // const coordinates = evStations.map((station) => ({
+  //   longitude: station.position.longitude,
+  //   latidute: station.position.latitude,
+  // }));
+
+  //const center = getCenter(coordinates);
+
   const [viewState, setViewState] = React.useState({
     longitude: 26.102537,
     latitude: 44.426765,
-    zoom: 12,
-    height: "700px",
-    width: "fit",
+    zoom: 16,
+    bearing: 0,
+    pitch: 0,
   });
 
+  const evStationsMarkers = useMemo(
+    () =>
+      evStations.map((station, index) => (
+        <Marker
+          longitude={station.position.longitude}
+          latitude={station.position.latitude}
+          key={index}
+        >
+          <MdOutlineElectricCar
+            className="cursor-pointer text-5xl animate-bounce"
+            color="green"
+            style={{ marginRight: "8px" }}
+          />
+        </Marker>
+      )),
+    []
+  );
+
   return (
-    <div style={{ height: "850px" }}>
-      <ReactMapGL
-        {...viewState}
-        mapStyle="mapbox://styles/johnsmith43943/cluy7f6f3000f01pf2zt221vb"
-        mapboxAccessToken="pk.eyJ1Ijoiam9obnNtaXRoNDM5NDMiLCJhIjoiY2x1eTZzaDdpMHQ0MTJqbnZ0NXJmMjA0YSJ9.FUs1K2u4wf4nRAXq3y-PlQ"
-        onMove={(evt) => setViewState(evt.viewState)}
-      />
-    </div>
+    <ReactMapGL
+      {...viewState}
+      mapboxAccessToken="pk.eyJ1Ijoiam9obnNtaXRoNDM5NDMiLCJhIjoiY2x1eTZzaDdpMHQ0MTJqbnZ0NXJmMjA0YSJ9.FUs1K2u4wf4nRAXq3y-PlQ"
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      onMove={(e) => setViewState(e.viewState)}
+    >
+      {evStationsMarkers}
+    </ReactMapGL>
   );
 };
 
-export default Map;
+export default MapGL;

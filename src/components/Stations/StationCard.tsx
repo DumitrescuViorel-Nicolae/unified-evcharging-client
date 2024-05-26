@@ -21,6 +21,11 @@ import {
 } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import React from "react";
+import createSelectors from "../../store/createSelectors";
+import appStateStore from "../../store/CommonStore/appStateStore";
+import CheckoutForm from "./StationsPayment";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 interface StationCardProps {
   station: EVStation;
@@ -34,9 +39,16 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
     badge: "teal",
   };
 
+  const useAppStateStore = createSelectors(appStateStore);
+  const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const stripePromise = loadStripe(
+    "pk_test_51P83Hp2NoPLM2O79nTVTKxqSfpGK6ElaNHXAYrH6OYNoGvjBHBmGPHfcP27bWtJN4CZdgHJ7VXxt2U4PKgpZCEAA00LSFc66VY"
+  );
+
   const onPay = (stripeId: string | null) => {
-    console.log(stripeId);
+    setIsOpen(true);
   };
 
   return (
@@ -125,6 +137,9 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm />
+      </Elements>
     </>
   );
 };

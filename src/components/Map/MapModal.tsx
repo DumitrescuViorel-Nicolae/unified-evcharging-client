@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   ModalOverlay,
@@ -7,9 +6,14 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import Map from "./Map";
+import MapGL from "./Map";
 
-const MapModal = ({ isOpen, onClose }) => {
+interface MapModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} isCentered>
       <ModalOverlay />
@@ -17,7 +21,9 @@ const MapModal = ({ isOpen, onClose }) => {
         <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Map isOpen={isOpen} onClose={onClose} />
+          <div style={{ width: "100%", height: "80vh" }}>
+            <MapGL />
+          </div>
         </ModalBody>
       </ModalContent>
     </Modal>
