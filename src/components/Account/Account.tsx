@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Box,
   Heading,
@@ -8,10 +7,31 @@ import {
   FormLabel,
   Input,
   Stack,
+  SimpleGrid,
+  FormErrorMessage,
 } from "@chakra-ui/react";
+import * as yup from "yup";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import createSelectors from "../../store/createSelectors";
 import accountStore from "../../store/UserStore/accountStore";
 import { User } from "../../interfaces/User";
+
+// Validation schema
+const schema = yup.object().shape({
+  username: yup.string().required("Username is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phoneNumber: yup
+    .string()
+    .matches(
+      /^(\(\d{3}\)\s|\d{3}-)\d{3}-\d{4}$/,
+      "Phone number is not valid (format: XXX-XXX-XXXX)"
+    )
+    .required("Phone number is required"),
+});
 
 const AccountDetails = () => {
   // STORES
@@ -19,29 +39,40 @@ const AccountDetails = () => {
   const user = useUserStore.use.user();
   const updateUser = useUserStore.use.setUser();
 
-  // LOCAL STATE
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    username: user.username,
-    email: user.email,
-    phoneNumber: user.phoneNumber,
+  // FORM SETUP
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      username: user.username,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+    },
   });
 
-  const handleEditClick = () => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setValue("username", user.username);
+      setValue("email", user.email);
+      setValue("phoneNumber", user.phoneNumber);
+    }
+  }, [user, setValue]);
+
+  const handleEditClick = (e: Event) => {
+    e.preventDefault();
     setIsEditing(true);
   };
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     // Send form data to update user details
-    updateUser(formData as User);
+    updateUser(data as User);
+    setIsEditing(false);
   };
 
   if (!user) {
@@ -53,62 +84,61 @@ const AccountDetails = () => {
   }
 
   return (
-    <Box px={12} mt="4">
-      <Heading size="lg" mb="4">
+    <Box px={12} mt="4" maxW="700px" mx="auto">
+      <Heading size="lg" mb="6">
         Profile
       </Heading>
-      <Stack width={"300px"} spacing="4" m={"0 auto"}>
-        <FormControl>
-          <FormLabel>Username</FormLabel>
-          <Input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Phone Number</FormLabel>
-          <Input
-            type="tel"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
-          />
-        </FormControl>
-        {isEditing ? (
-          <Button
-            type="submit"
-            onClick={handleSubmit}
-            width={"100px"}
-            m={"0 auto"}
-            colorScheme="blue"
-          >
-            Save
-          </Button>
-        ) : (
-          <Button
-            width={"100px"}
-            m={"0 auto"}
-            onClick={handleEditClick}
-            bg={"accent.100"}
-          >
-            Edit Profile
-          </Button>
-        )}
-      </Stack>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+          <FormControl isInvalid={!!errors.username}>
+            <FormLabel>Username</FormLabel>
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="text" readOnly={!isEditing} />
+              )}
+            />
+            <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.email}>
+            <FormLabel>Email</FormLabel>
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="email" readOnly={!isEditing} />
+              )}
+            />
+            <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.phoneNumber}>
+            <FormLabel>Phone Number</FormLabel>
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} type="tel" readOnly={!isEditing} />
+              )}
+            />
+            <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
+          </FormControl>
+        </SimpleGrid>
+
+        <Box mt="6" textAlign="center">
+          {isEditing ? (
+            <Button type="submit" bg="accent.200">
+              Save
+            </Button>
+          ) : (
+            <Button type="button" onClick={handleEditClick} bg="accent.100">
+              Edit Profile
+            </Button>
+          )}
+        </Box>
+      </form>
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { createStore } from "zustand";
-import { User, UserState } from "../../interfaces/User";
+import { User } from "../../interfaces/User";
 import axiosInstance from "../../axios/axiosInstance";
 import { handleAxiosError } from "../../utils/errorParsing";
 import appStateStore from "../CommonStore/appStateStore";
@@ -41,7 +41,14 @@ const accountStore = createStore<AccountStore>((set) => ({
         toast.error(response.data.message);
       }
 
-      set({ user: user });
+      set({
+        user: {
+          ...currentUser,
+          username: user.username,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        },
+      });
     } catch (error) {
       handleAxiosError(error);
     }
