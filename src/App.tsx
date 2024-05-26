@@ -6,6 +6,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { HomePage } from "./components/Navigation/Home";
 import History from "./components/Account/History";
 import LoadingScreen from "./components/Common/LoadingScreen";
+import AccountDetails from "./components/Account/Account";
 
 const colors = {
   primary: {
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/history" element={<History />} />
+          <Route path="/account" element={<AccountDetails />} />
         </Routes>
       </Router>
       <ToastContainer />

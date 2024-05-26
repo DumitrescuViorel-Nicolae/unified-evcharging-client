@@ -7,7 +7,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { BiUser, BiHistory, BiLogOut } from "react-icons/bi";
+import { BiUser, BiHistory, BiLogOut, BiHeart } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import createSelectors from "../../store/createSelectors";
 import appStateStore from "../../store/CommonStore/appStateStore";
@@ -35,9 +35,16 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({ isLoggedIn }) => {
           User Account
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<BiUser fontSize={"1.5rem"} />}>
-            User Details
-          </MenuItem>
+          <Link to="/account">
+            <MenuItem icon={<BiUser fontSize={"1.5rem"} />}>
+              User Details
+            </MenuItem>
+          </Link>
+          <Link to="/account">
+            <MenuItem icon={<BiHeart fontSize={"1.5rem"} />}>
+              Saved Locations
+            </MenuItem>
+          </Link>
           <Link to="/history">
             <MenuItem icon={<BiHistory fontSize={"1.5rem"} />}>
               History
