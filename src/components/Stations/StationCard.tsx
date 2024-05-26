@@ -47,7 +47,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
     "pk_test_51P83Hp2NoPLM2O79nTVTKxqSfpGK6ElaNHXAYrH6OYNoGvjBHBmGPHfcP27bWtJN4CZdgHJ7VXxt2U4PKgpZCEAA00LSFc66VY"
   );
 
-  const onPay = (stripeId: string | null) => {
+  const onPay = () => {
     setIsOpen(true);
   };
 
@@ -89,7 +89,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         <CardBody>
           <Box className="text-center">
             <Button
-              onClick={() => onPay(station.stripeAccountID)}
+              onClick={() => onPay()}
               bg={"accent.100"}
               className="mt-4 mx-auto"
             >
@@ -114,18 +114,15 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
                   <Badge colorScheme={colorScheme.badge}>
                     {connector.supplierName}
                   </Badge>
-                  <Text>{connector.connectorType}</Text>
+                  <Text>{connector.connectorType} Socket</Text>
                 </Stack>
                 <Text>Charge Capacity: {connector.chargeCapacity}</Text>
-                <Text>Max Power Level: {connector.maxPowerLevel}</Text>
-                <Text>
-                  Customer Charge Level: {connector.customerChargeLevel}
-                </Text>
-                <Text>
-                  Customer Connector Name: {connector.customerConnectorName}
+                <Text>Max Power Level: {connector.maxPowerLevel}kW</Text>
+                <Text my={2} fontWeight={"bold"}>
+                  Price: {connector.price} RON/kWh
                 </Text>
                 {index < station.connectorDetails.length - 1 && (
-                  <Divider mt={2} />
+                  <Divider mt={4} />
                 )}
               </Box>
             ))}
@@ -138,7 +135,10 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         </ModalContent>
       </Modal>
       <Elements stripe={stripePromise}>
-        <CheckoutForm />
+        <CheckoutForm
+          evStationStripeAccountId={station.stripeAccountID}
+          amount={2}
+        />
       </Elements>
     </>
   );

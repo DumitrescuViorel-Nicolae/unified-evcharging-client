@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import {
   Box,
   Button,
@@ -15,15 +15,27 @@ import {
   Stack,
   Input,
 } from "@chakra-ui/react";
-import Cards from "react-credit-cards";
-import "react-credit-cards/es/styles-compiled.css";
 import appStateStore from "../../store/CommonStore/appStateStore";
 import createSelectors from "../../store/createSelectors";
+import "react-credit-cards/es/styles-compiled.css";
+import Cards from "react-credit-cards";
+import evStationStore from "../../store/EVStationStore/evStationStore";
 
-const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
+interface CheckoutFormProps {
+  amount: number;
+  evStationStripeAccountId: string;
+}
+
+const CheckoutForm: React.FC<CheckoutFormProps> = ({
+  amount,
+  evStationStripeAccountId,
+}) => {
   const useAppStateStore = createSelectors(appStateStore);
+  const useEvStationStore = createSelectors(evStationStore);
+
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
   const isOpen = useAppStateStore.use.isPaymentModalOpen();
+  const processPayment = useEvStationStore.use.makePayment();
 
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardDetails, setCardDetails] = useState({
@@ -32,14 +44,19 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
     name: "",
     number: "",
   });
+  const [focus, setFocus] = useState<string>("");
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCardDetails((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault();
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setFocus(e.target.name);
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     // Simplified validation, you may want to perform more thorough validation
     if (
@@ -51,12 +68,8 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
       alert("Please fill in all card details.");
       return;
     }
-
-    // Close modal after submission
+    processPayment(evStationStripeAccountId);
     setIsOpen(false);
-
-    // Send card details to API
-    // Your API interaction code here
   };
 
   return (
@@ -81,6 +94,7 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
                   expiry={cardDetails.expiry}
                   name={cardDetails.name}
                   number={cardDetails.number}
+                  focused={focus}
                 />
                 <Input
                   type="tel"
@@ -88,6 +102,7 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
                   placeholder="Card Number"
                   value={cardDetails.number}
                   onChange={handleInputChange}
+                  onFocus={handleInputFocus}
                   maxLength={16}
                   required
                 />
@@ -97,6 +112,7 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
                   placeholder="Name"
                   value={cardDetails.name}
                   onChange={handleInputChange}
+                  onFocus={handleInputFocus}
                   required
                 />
                 <Input
@@ -105,6 +121,7 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
                   placeholder="MM/YY"
                   value={cardDetails.expiry}
                   onChange={handleInputChange}
+                  onFocus={handleInputFocus}
                   maxLength={5}
                   required
                 />
@@ -114,6 +131,7 @@ const CheckoutForm = ({ amount, evStationStripeAccountId }) => {
                   placeholder="CVC"
                   value={cardDetails.cvc}
                   onChange={handleInputChange}
+                  onFocus={handleInputFocus}
                   maxLength={3}
                   required
                 />

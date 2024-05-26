@@ -1,5 +1,5 @@
 export interface EVStation {
-  stripeAccountID: string | null;
+  stripeAccountID: string;
   brand: string;
   totalNumberOfConnectors: number;
   address: Address;
@@ -30,6 +30,7 @@ interface ConnectorDetail {
   connectorType: string;
   chargeCapacity: string;
   maxPowerLevel: number;
+  price: number;
   customerChargeLevel: string;
   customerConnectorName: string;
   connectorStatuses?: ConnectorStatus[] | null; // Nullable since it's optional
