@@ -75,17 +75,6 @@ const ManageEVStations = () => {
     <>
       {evStations.length === 0 ? (
         <>
-          <Box>
-            {" "}
-            <Button
-              hidden={isAlertOpened || isAddStationModalOpen}
-              width={"140px"}
-              onClick={handleOpenAlert}
-              bg={"accent.100"}
-            >
-              Add EV Station
-            </Button>
-          </Box>
           <ScaleFade initialScale={0.9} in={isAlertOpened}>
             <AlertDialog
               isCentered
@@ -114,21 +103,6 @@ const ManageEVStations = () => {
               </AlertDialogOverlay>
             </AlertDialog>
           </ScaleFade>
-
-          <Modal
-            isOpen={isAddStationModalOpen}
-            onClose={handleAddStationModalClose}
-          >
-            <ModalOverlay />
-            <ModalContent maxW={"900px"}>
-              <ModalHeader>Add EV Station</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                {/* Render the form component for adding a new station */}
-                <AddStationForm onClose={handleAddStationModalClose} />
-              </ModalBody>
-            </ModalContent>
-          </Modal>
         </>
       ) : (
         <TableContainer mx={6}>
@@ -175,6 +149,18 @@ const ManageEVStations = () => {
               ))}
             </Tbody>
           </Table>
+
+          <Box m={3}>
+            {" "}
+            <Button
+              hidden={isAlertOpened || isAddStationModalOpen}
+              width={"140px"}
+              onClick={handleOpenAlert}
+              bg={"accent.100"}
+            >
+              Add EV Station
+            </Button>
+          </Box>
 
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -272,6 +258,21 @@ const ManageEVStations = () => {
           />
         </TableContainer>
       )}
+
+      <Modal
+        isOpen={isAddStationModalOpen}
+        onClose={handleAddStationModalClose}
+      >
+        <ModalOverlay />
+        <ModalContent maxW={"900px"}>
+          <ModalHeader>Add EV Station</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Render the form component for adding a new station */}
+            <AddStationForm onClose={handleAddStationModalClose} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
