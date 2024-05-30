@@ -1,4 +1,5 @@
 export interface EVStation {
+  stationID: number;
   stripeAccountID: string;
   brand: string;
   totalNumberOfConnectors: number;
@@ -33,7 +34,7 @@ interface ConnectorDetail {
   price: number;
   customerChargeLevel: string;
   customerConnectorName: string;
-  connectorStatuses?: ConnectorStatus[] | null; // Nullable since it's optional
+  connectorStatuses: ConnectorStatus[];
 }
 
 interface ConnectorStatus {
@@ -52,5 +53,5 @@ interface PaymentType {
 }
 
 interface PaymentTypes {
-  type: string[]; // Assuming this should be a list of string types
+  type: string[];
 }

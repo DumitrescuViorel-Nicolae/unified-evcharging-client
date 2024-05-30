@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 export interface EVStationStore {
   evStations: EVStation[];
   getEVStation: () => void;
+  deleteEVStation: (stationID: number) => void;
   makePayment: (stripeAccountId: string) => void;
   transactions: PaymentTransaction[] | [];
   getTransactions: () => void;
@@ -41,6 +42,21 @@ const evStationStore = createStore<EVStationStore>((set) => ({
 
       if (response.data.success) {
         toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      handleAxiosError(error);
+    }
+  },
+  deleteEVStation: async (stationID) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/EVStation/deleteEVStation?evStationID=${stationID}`
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        evStationStore.getState().getEVStation();
       } else {
         toast.error(response.data.message);
       }

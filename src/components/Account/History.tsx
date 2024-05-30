@@ -32,12 +32,12 @@ const History = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedTransactionUrl, setSelectedTransactionUrl] = useState("");
 
-  const handleTransactionUrlClick = (url) => {
+  const handleTransactionUrlClick = (url: string) => {
     setSelectedTransactionUrl(url);
     onOpen();
   };
 
-  const truncateUrl = (url) => {
+  const truncateUrl = (url: string) => {
     const maxLength = 25;
     return url.length > maxLength ? url.substr(0, maxLength - 3) + "..." : url;
   };

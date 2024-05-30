@@ -40,21 +40,24 @@ const NavBar = () => {
               borderRadius="full"
             />
           </Link>
+          <Filter />
         </Flex>
 
         {/* Middle */}
-        <Filter />
 
         {/* Right */}
         <Flex align="center">
-          <Button
-            hidden={user.role !== "Company"}
-            bg={"accent.100"}
-            fontSize="15px"
-            mr="8"
-          >
-            Add EV Charger
-          </Button>
+          <Link to={"/manage-stations"}>
+            {" "}
+            <Button
+              //hidden={user.role !== "Company"}
+              bg={"accent.100"}
+              fontSize="15px"
+              mr="8"
+            >
+              Add EV Charger
+            </Button>
+          </Link>
           <UserStateCases isLoggedIn={isLoggendIn} />
         </Flex>
       </Flex>

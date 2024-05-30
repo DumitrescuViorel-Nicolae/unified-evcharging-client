@@ -7,6 +7,7 @@ import { HomePage } from "./components/Navigation/Home";
 import History from "./components/Account/History";
 import LoadingScreen from "./components/Common/LoadingScreen";
 import AccountDetails from "./components/Account/Account";
+import ManageEVStations from "./components/Stations/ManageEVStations";
 
 const colors = {
   primary: {
@@ -40,6 +41,7 @@ function App() {
         <LoadingScreen />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/manage-stations" element={<ManageEVStations />} />
           <Route path="/history" element={<History />} />
           <Route path="/account" element={<AccountDetails />} />
         </Routes>

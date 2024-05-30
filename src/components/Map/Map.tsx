@@ -16,8 +16,8 @@ const MapGL = () => {
   //const center = getCenter(coordinates);
 
   const [viewState, setViewState] = React.useState({
-    longitude: 26.102537,
-    latitude: 44.426765,
+    longitude: 26.0999,
+    latitude: 44.4362,
     zoom: 16,
     bearing: 0,
     pitch: 0,
