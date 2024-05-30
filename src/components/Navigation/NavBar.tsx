@@ -55,7 +55,7 @@ const NavBar = () => {
               fontSize="15px"
               mr="8"
             >
-              Add EV Charger
+              Manage Stations
             </Button>
           </Link>
           <UserStateCases isLoggedIn={isLoggendIn} />
