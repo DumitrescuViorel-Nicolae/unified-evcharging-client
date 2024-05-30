@@ -32,7 +32,12 @@ const Filter: React.FC<FilterProps> = () => {
   };
 
   return (
-    <Flex direction="column" bg="complementary.300" color="primary.600">
+    <Flex
+      mt={2.5}
+      direction="column"
+      bg="complementary.300"
+      color="primary.600"
+    >
       <Button
         variant="solid"
         bg={"accent.100"}

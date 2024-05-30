@@ -32,7 +32,7 @@ const DeleteEVStationDialog = ({ isOpen, onClose, stationID }) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
+              Delete Electric Station
             </AlertDialogHeader>
 
             <AlertDialogBody>

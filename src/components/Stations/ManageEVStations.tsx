@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Table,
   Thead,
@@ -19,6 +19,13 @@ import {
   FormLabel,
   Input,
   ModalCloseButton,
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogHeader,
+  ScaleFade,
+  AlertDialogFooter,
+  Box,
 } from "@chakra-ui/react";
 import { MdEdit, MdDelete } from "react-icons/md"; // Import edit and delete icons
 import { EVStation } from "../../interfaces/EVStation";
@@ -30,13 +37,15 @@ import DeleteEVStation from "./DeleteEVStation";
 const ManageEVStations = () => {
   const useEVStore = createSelectors(evStationStore);
   const evStations = useEVStore.use.evStations();
-  const deleteEVStation = useEVStore.use.deleteEVStation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedStation, setSelectedStation] = useState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedStation, setSelectedStation] = useState<any>();
   const [isAddStationModalOpen, setIsAddStationModalOpen] = useState(false);
   const [isDeletePopup, setIsDeletePopup] = useState(false);
-  const [stationID, setStationID] = useState();
+  const [stationID, setStationID] = useState<number | null>();
+  const cancelRef = useRef();
+  const [isAlertOpened, setIsAlertOpened] = useState(evStations.length === 0);
 
   const handleEdit = (station: EVStation) => {
     setSelectedStation(station);
@@ -50,6 +59,11 @@ const ManageEVStations = () => {
   };
 
   const handleAddStationModalOpen = () => {
+    setIsAlertOpened(false);
+    setIsAddStationModalOpen(true);
+  };
+
+  const handleOpenAlert = () => {
     setIsAddStationModalOpen(true);
   };
 
@@ -61,13 +75,52 @@ const ManageEVStations = () => {
     <>
       {evStations.length === 0 ? (
         <>
-          <Button onClick={handleAddStationModalOpen}>Add EV Station</Button>
+          <Box>
+            {" "}
+            <Button
+              hidden={isAlertOpened || isAddStationModalOpen}
+              width={"140px"}
+              onClick={handleOpenAlert}
+              bg={"accent.100"}
+            >
+              Add EV Station
+            </Button>
+          </Box>
+          <ScaleFade initialScale={0.9} in={isAlertOpened}>
+            <AlertDialog
+              isCentered
+              isOpen={isAlertOpened}
+              leastDestructiveRef={cancelRef}
+            >
+              <AlertDialogOverlay>
+                <AlertDialogContent>
+                  <AlertDialogHeader m={"0 auto"} fontSize={"md"}>
+                    Please add an electric station
+                  </AlertDialogHeader>
+                  <AlertDialogFooter m={"0 auto"}>
+                    <Button
+                      width={"140px"}
+                      onClick={handleAddStationModalOpen}
+                      bg={"accent.100"}
+                      mr={2}
+                    >
+                      Add EV Station
+                    </Button>
+                    <Button onClick={() => setIsAlertOpened(false)}>
+                      Cancel
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialogOverlay>
+            </AlertDialog>
+          </ScaleFade>
+
           <Modal
             isOpen={isAddStationModalOpen}
             onClose={handleAddStationModalClose}
           >
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent maxW={"900px"}>
               <ModalHeader>Add EV Station</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
@@ -102,11 +155,14 @@ const ManageEVStations = () => {
                       size="sm"
                       leftIcon={<MdEdit />}
                       mr={3}
+                      width={"100px"}
+                      bg={"primary.600"}
                       onClick={() => handleEdit(station)}
                     >
                       Edit
                     </Button>
                     <Button
+                      width={"100px"}
                       size="sm"
                       leftIcon={<MdDelete />}
                       colorScheme="red"
