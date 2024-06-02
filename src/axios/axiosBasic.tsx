@@ -9,9 +9,7 @@ const axiosBasic = axios.create({
 axiosBasic.interceptors.request.use(
   (config) => {
     // Set loading state to true before sending the request
-    console.log("here");
     appStateStore.getState().setIsLoading(true);
-    console.log("after here");
     return config;
   },
   (error) => {

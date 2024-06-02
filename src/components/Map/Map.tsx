@@ -7,16 +7,7 @@ import { GiPositionMarker } from "react-icons/gi";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Box, Button, Divider, Text } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
-import { Coordinates } from "../../interfaces/Coordinates";
-
-// //NEED to refactor
-// const getDirections = async (start: Coordinates, end: Coordinates) => {
-//   const response = await fetch(
-//     `https://api.mapbox.com/directions/v5/mapbox/driving/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?geometries=geojson&access_token=pk.eyJ1Ijoiam9obnNtaXRoNDM5NDMiLCJhIjoiY2x1eTZzaDdpMHQ0MTJqbnZ0NXJmMjA0YSJ9.FUs1K2u4wf4nRAXq3y-PlQ`
-//   );
-//   const data = await response.json();
-//   return data.routes[0].geometry;
-// };
+import accountStore from "../../store/UserStore/accountStore";
 
 const MapGL = () => {
   const useEvStore = createSelectors(evStationStore);
@@ -24,51 +15,32 @@ const MapGL = () => {
   const getDirections = useEvStore.use.getDirectionToStation();
   const directions = useEvStore.use.directions();
 
+  const useAccountStore = createSelectors(accountStore);
+  const userLocation = useAccountStore.use.geolocation();
+
   const [viewState, setViewState] = useState({
     longitude: 26.0999,
     latitude: 44.4362,
     zoom: 13,
   });
 
-  const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
   const [selectedStation, setSelectedStation] = useState<EVStation | null>(
     null
   );
 
   // Get user's current location
   useMemo(() => {
-    const handleLocationSuccess = (position: {
-      coords: { latitude: number; longitude: number };
-    }) => {
-      setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-      setViewState((prevState) => ({
-        ...prevState,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      }));
-    };
-
-    const handleLocationError = (error: GeolocationPositionError) => {
-      console.error("Error getting user location:", error);
-    };
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        handleLocationSuccess,
-        handleLocationError,
-        { enableHighAccuracy: true }
-      );
-    }
-  }, [evStations]);
+    setViewState((prevState) => ({
+      ...prevState,
+      latitude: userLocation?.latitude ?? prevState.latitude,
+      longitude: userLocation?.longitude ?? prevState.longitude,
+    }));
+  }, [userLocation]);
 
   const handleMarkerClick = (station: EVStation) => {
     if (userLocation) {
-      getDirections(userLocation, station.position).then((data) =>
-        console.log(data)
-      );
+      getDirections(userLocation, station.position);
+      console.log("directions", directions);
       setViewState({
         ...viewState,
         longitude: station.position.longitude,
@@ -95,6 +67,7 @@ const MapGL = () => {
           />
         </Marker>
       )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [evStations]
   );
 

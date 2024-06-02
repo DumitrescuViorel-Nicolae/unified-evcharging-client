@@ -4,13 +4,14 @@ import axiosInstance from "../../axios/axiosInstance";
 import { handleAxiosError } from "../../utils/errorParsing";
 import appStateStore from "../CommonStore/appStateStore";
 import { toast } from "react-toastify";
+import { Coordinates } from "../../interfaces/Coordinates";
 
 export interface AccountStore {
   user: User;
   getUser: (email: string) => void;
   setUser: (user: User) => void;
   clearUser: () => void;
-  geolocation: any;
+  geolocation: Coordinates | null;
   getGeolocation: () => void;
 }
 
@@ -67,7 +68,32 @@ const accountStore = createStore<AccountStore>((set) => ({
       handleAxiosError(error);
     }
   },
-  getGeolocation: () => {},
+  getGeolocation: () => {
+    const handleLocationSuccess = (position: {
+      coords: { latitude: number; longitude: number };
+    }) => {
+      set({
+        geolocation: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      });
+    };
+
+    const handleLocationError = (error: GeolocationPositionError) => {
+      toast.error(`Error getting user location: ${error.message}`);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        handleLocationSuccess,
+        handleLocationError,
+        { enableHighAccuracy: true }
+      );
+    } else {
+      toast.error("Browser does not support geolocation :(");
+    }
+  },
   clearUser: () =>
     set(() => ({
       user: {

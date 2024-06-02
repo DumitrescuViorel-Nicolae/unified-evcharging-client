@@ -20,7 +20,7 @@ const LoadingScreen = () => {
           opacity={"75%"}
           bg={"primary.600"}
         >
-          <VStack spacing={4} mt={"45vh"}>
+          <VStack spacing={4} className="align-middle">
             <Spinner size="xl" color="complementary.300" />
             <div>Loading...</div>
           </VStack>

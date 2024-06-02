@@ -9,6 +9,8 @@ import LoadingScreen from "./components/Common/LoadingScreen";
 import AccountDetails from "./components/Account/Account";
 import ManageEVStations from "./components/Stations/ManageEVStations";
 import MapGL from "./components/Map/Map";
+import createSelectors from "./store/createSelectors";
+import accountStore from "./store/UserStore/accountStore";
 
 const colors = {
   primary: {
@@ -35,6 +37,9 @@ const theme = extendTheme({
 });
 
 function App() {
+  const useAccountStore = createSelectors(accountStore);
+  const getUserLocation = useAccountStore.use.getGeolocation();
+  getUserLocation();
   return (
     <ChakraProvider theme={theme}>
       <Router>
