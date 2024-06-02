@@ -8,6 +8,7 @@ import History from "./components/Account/History";
 import LoadingScreen from "./components/Common/LoadingScreen";
 import AccountDetails from "./components/Account/Account";
 import ManageEVStations from "./components/Stations/ManageEVStations";
+import MapGL from "./components/Map/Map";
 
 const colors = {
   primary: {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/manage-stations" element={<ManageEVStations />} />
           <Route path="/history" element={<History />} />
           <Route path="/account" element={<AccountDetails />} />
+          <Route path="/map" element={<MapGL />} />
         </Routes>
       </Router>
       <ToastContainer />

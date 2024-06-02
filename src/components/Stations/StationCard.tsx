@@ -43,9 +43,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const stripePromise = loadStripe(
-    "pk_test_51P83Hp2NoPLM2O79nTVTKxqSfpGK6ElaNHXAYrH6OYNoGvjBHBmGPHfcP27bWtJN4CZdgHJ7VXxt2U4PKgpZCEAA00LSFc66VY"
-  );
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
 
   const onPay = () => {
     setIsOpen(true);
@@ -61,7 +59,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
       >
         <CardBody>
           <Image
-            src="https://images.unsplash.com/photo-1616361715039-11dde2199a21?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={import.meta.env.VITE_PLACEHOLDER_IMAGE}
             alt="Station Image"
             borderRadius="lg"
           />

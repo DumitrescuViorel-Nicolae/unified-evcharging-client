@@ -5,7 +5,7 @@ import { GeneralResponse } from "../../interfaces/GeneralResponse";
 import axiosBasic from "../../axios/axiosBasic";
 import { handleAxiosError } from "../../utils/errorParsing";
 import accountStore from "./accountStore";
-import { RegistrationFormData } from "../../interfaces/RegistrationFormData ";
+import { RegistrationFormData } from "../../interfaces/RegistrationFormData";
 import appStateStore from "../CommonStore/appStateStore";
 
 interface AuthState {

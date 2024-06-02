@@ -9,8 +9,18 @@ const LoadingScreen = () => {
   return (
     <>
       {isLoading ? (
-        <Center h="100vh" zIndex="9999">
-          <VStack spacing={4}>
+        <Center
+          h="200vh"
+          w="100vw"
+          zIndex="9999"
+          position={"absolute"}
+          top={"50%"}
+          left={"50%"}
+          transform={"translate(-50%, -50%)"}
+          opacity={"75%"}
+          bg={"primary.600"}
+        >
+          <VStack spacing={4} mt={"45vh"}>
             <Spinner size="xl" color="complementary.300" />
             <div>Loading...</div>
           </VStack>

@@ -10,6 +10,8 @@ export interface AccountStore {
   getUser: (email: string) => void;
   setUser: (user: User) => void;
   clearUser: () => void;
+  geolocation: any;
+  getGeolocation: () => void;
 }
 
 const accountStore = createStore<AccountStore>((set) => ({
@@ -23,6 +25,7 @@ const accountStore = createStore<AccountStore>((set) => ({
     loading: false,
     error: null,
   },
+  geolocation: null,
   setUser: async (user) => {
     try {
       const currentUser = accountStore.getState().user;
@@ -64,6 +67,7 @@ const accountStore = createStore<AccountStore>((set) => ({
       handleAxiosError(error);
     }
   },
+  getGeolocation: () => {},
   clearUser: () =>
     set(() => ({
       user: {

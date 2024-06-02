@@ -3,7 +3,7 @@ import authStore from "../store/UserStore/authStore";
 import appStateStore from "../store/CommonStore/appStateStore";
 
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:7084/api",
+  baseURL: import.meta.env.VITE_BASE_SERVER_URL,
   timeout: 10000,
 });
 

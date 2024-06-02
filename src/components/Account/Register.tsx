@@ -10,7 +10,7 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { RegistrationFormData } from "../../interfaces/RegistrationFormData ";
+import { RegistrationFormData } from "../../interfaces/RegistrationFormData";
 import createSelectors from "../../store/createSelectors";
 import authStore from "../../store/UserStore/authStore";
 import appStateStore from "../../store/CommonStore/appStateStore";

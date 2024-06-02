@@ -4,7 +4,7 @@ import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
 import StationCard from "../Stations/StationCard";
 import { SlEnergy } from "react-icons/sl";
-import MapModal from "../Map/MapModal";
+import MapDrawer from "../Map/MapDrawer";
 
 export const HomePage = () => {
   // STORES
@@ -38,6 +38,7 @@ export const HomePage = () => {
           ))}
         </SimpleGrid>
       </Box>
+      {/* <Link to={"/map"}> */}
       <Button
         position="fixed"
         bottom="20px"
@@ -60,7 +61,9 @@ export const HomePage = () => {
         <SlEnergy fontSize={20} style={{ marginRight: "8px" }} />
         Map
       </Button>
-      <MapModal isOpen={isOpen} onClose={handleCloseModal} />
+      {/* </Link> */}
+
+      <MapDrawer isOpen={isOpen} onClose={handleCloseModal} />
     </Container>
   );
 };
