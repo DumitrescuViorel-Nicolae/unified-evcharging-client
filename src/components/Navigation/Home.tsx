@@ -1,10 +1,11 @@
 import { Box, Container, SimpleGrid, Button } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
 import StationCard from "../Stations/StationCard";
 import { SlEnergy } from "react-icons/sl";
 import MapDrawer from "../Map/MapDrawer";
+import accountStore from "../../store/UserStore/accountStore";
 
 export const HomePage = () => {
   // STORES
@@ -13,11 +14,14 @@ export const HomePage = () => {
   // USING
   const getEVStations = useEVStationStore.use.getEVStation();
   const evStations = useEVStationStore.use.evStations();
+  const useAccountStore = createSelectors(accountStore);
+  const userLocation = useAccountStore.use.geolocation();
 
   // LOCAL STATE
-  useEffect(() => {
+  useMemo(() => {
     getEVStations();
-  }, [getEVStations]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLocation]);
 
   const [isOpen, setIsOpen] = useState(false);
 

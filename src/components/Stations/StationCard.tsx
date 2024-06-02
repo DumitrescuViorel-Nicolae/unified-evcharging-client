@@ -18,6 +18,7 @@ import {
   ModalFooter,
   useDisclosure,
   Flex,
+  Spacer,
 } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import React from "react";
@@ -70,18 +71,23 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
 
             <Stack spacing="1" textAlign="right">
               <Text color={colorScheme.text} fontSize="md">
-                {station.address.street}, {station.address.city},{" "}
-                {station.address.country}
+                {station.address.street}, {station.address.city}
               </Text>
               <Text color={colorScheme.text} fontSize="md">
                 {`${station.totalNumberOfConnectors}/${station.totalNumberOfConnectors}`}{" "}
                 Connectors
               </Text>
+              <Spacer className="m-2" />
             </Stack>
           </Flex>
-          <Button onClick={onOpen} textAlign={"center"} fontSize={"sm"}>
-            Details
-          </Button>
+          <Flex justify={"space-between"}>
+            <Button onClick={onOpen} textAlign={"center"} fontSize={"sm"}>
+              Details
+            </Button>
+            <Text color={colorScheme.text} fontSize="sm">
+              {station.distance}km away
+            </Text>
+          </Flex>
         </CardBody>
         <Divider />
         <CardBody>

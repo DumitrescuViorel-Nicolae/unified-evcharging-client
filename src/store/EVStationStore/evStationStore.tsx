@@ -6,7 +6,7 @@ import PaymentTransaction from "../../interfaces/Transactions";
 import axiosInstance from "../../axios/axiosInstance";
 import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
-import axios from "axios";
+import accountStore from "../UserStore/accountStore";
 
 export interface EVStationStore {
   evStations: EVStation[];
@@ -23,7 +23,12 @@ const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
   getEVStation: async () => {
     try {
-      const response = await axiosBasic.get("/EVStation/getEVInfrastructure");
+      const response = await axiosBasic.get("/EVStation/getEVInfrastructure", {
+        params: {
+          latitude: accountStore.getState().geolocation?.latitude,
+          longitude: accountStore.getState().geolocation?.longitude,
+        },
+      });
       set({ evStations: response.data });
     } catch (error) {
       handleAxiosError(error);

@@ -4,6 +4,7 @@ export interface EVStation {
   brand: string;
   totalNumberOfConnectors: number;
   address: Address;
+  distance: number;
   contacts: Contacts;
   position: Position;
   connectorDetails: ConnectorDetail[];
