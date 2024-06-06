@@ -18,7 +18,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  ModalCloseButton,
   AlertDialog,
   AlertDialogContent,
   AlertDialogOverlay,
@@ -31,17 +30,21 @@ import { MdEdit, MdDelete } from "react-icons/md"; // Import edit and delete ico
 import { EVStation } from "../../interfaces/EVStation";
 import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
-import AddStationForm from "./AddStationForm";
 import DeleteEVStation from "./DeleteEVStation";
+import appStateStore from "../../store/CommonStore/appStateStore";
+import AddStationModal from "./AddStation/AddStationModal";
 
 const ManageEVStations = () => {
   const useEVStore = createSelectors(evStationStore);
   const evStations = useEVStore.use.evStations();
 
+  const useAppState = createSelectors(appStateStore);
+  const isAddStationModalOpen = useAppState.use.isAddStationModalOpen();
+  const setIsAddStationModalOpen = useAppState.use.setIsAddStationModalOpen();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedStation, setSelectedStation] = useState<any>();
-  const [isAddStationModalOpen, setIsAddStationModalOpen] = useState(false);
   const [isDeletePopup, setIsDeletePopup] = useState(false);
   const [stationID, setStationID] = useState<number | null>();
   const cancelRef = useRef();
@@ -65,10 +68,6 @@ const ManageEVStations = () => {
 
   const handleOpenAlert = () => {
     setIsAddStationModalOpen(true);
-  };
-
-  const handleAddStationModalClose = () => {
-    setIsAddStationModalOpen(false);
   };
 
   return (
@@ -259,20 +258,7 @@ const ManageEVStations = () => {
         </TableContainer>
       )}
 
-      <Modal
-        isOpen={isAddStationModalOpen}
-        onClose={handleAddStationModalClose}
-      >
-        <ModalOverlay />
-        <ModalContent maxW={"900px"}>
-          <ModalHeader>Add EV Station</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {/* Render the form component for adding a new station */}
-            <AddStationForm onClose={handleAddStationModalClose} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <AddStationModal />
     </>
   );
 };

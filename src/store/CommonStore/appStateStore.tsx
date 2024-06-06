@@ -12,6 +12,9 @@ export interface AppStateStore {
 
   updatingUser: boolean;
   setIsUpdatingUser: (updating: boolean) => void;
+
+  isAddStationModalOpen: boolean;
+  setIsAddStationModalOpen: (open: boolean) => void;
 }
 
 const appStateStore = createStore<AppStateStore>((set) => ({
@@ -26,13 +29,17 @@ const appStateStore = createStore<AppStateStore>((set) => ({
 
   isPaymentModalOpen: false,
   setIsPaymentModalOpen: (open) => {
-    console.log("clicked");
     set({ isPaymentModalOpen: open });
   },
 
   updatingUser: false,
   setIsUpdatingUser: (updating) => {
     set({ updatingUser: updating });
+  },
+
+  isAddStationModalOpen: false,
+  setIsAddStationModalOpen(isOpen) {
+    set({ isAddStationModalOpen: isOpen });
   },
 }));
 
