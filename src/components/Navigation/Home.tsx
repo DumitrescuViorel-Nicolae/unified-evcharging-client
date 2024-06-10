@@ -33,6 +33,8 @@ export const HomePage = () => {
     setIsOpen(false);
   };
 
+  console.log(evStations);
+
   return (
     <Container maxW="1100px" mt={8}>
       <Box p={4} borderWidth="1px" borderRadius="lg" shadow="md">

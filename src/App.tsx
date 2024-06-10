@@ -50,6 +50,7 @@ function App() {
           <Route path="/manage-stations" element={<ManageEVStations />} />
           <Route path="/history" element={<History />} />
           <Route path="/account" element={<AccountDetails />} />
+          <Route path="/session" element={<AccountDetails />} />
           <Route path="/map" element={<MapGL />} />
         </Routes>
       </Router>

@@ -19,6 +19,7 @@ import {
   useDisclosure,
   Flex,
   Spacer,
+  Grid,
 } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import React from "react";
@@ -27,6 +28,8 @@ import appStateStore from "../../store/CommonStore/appStateStore";
 import CheckoutForm from "./StationsPayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import ConnectorStatus from "./ConnectorStatus";
+import accountStore from "../../store/UserStore/accountStore";
 
 interface StationCardProps {
   station: EVStation;
@@ -43,12 +46,17 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
   const useAppStateStore = createSelectors(appStateStore);
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
 
+  const useAccountStore = createSelectors(accountStore);
+  const userLocation = useAccountStore.use.geolocation();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
 
   const onPay = () => {
-    setIsOpen(true);
+    onOpen();
   };
+
+  console.log(station);
 
   return (
     <>
@@ -81,9 +89,6 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
             </Stack>
           </Flex>
           <Flex justify={"space-between"}>
-            <Button onClick={onOpen} textAlign={"center"} fontSize={"sm"}>
-              Details
-            </Button>
             <Text color={colorScheme.text} fontSize="sm">
               {station.distance}km away
             </Text>
@@ -97,10 +102,16 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
               bg={"accent.100"}
               className="mt-4 mx-auto"
             >
-              Pay
+              Select
             </Button>
             <Button bg={"accent.100"} className="mt-4 mx-auto ml-2">
-              Navigate
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&origin=${userLocation?.latitude},${userLocation?.longitude}&destination=${station.position.latitude},${station.position.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Navigate
+              </a>
             </Button>
           </Box>
         </CardBody>
@@ -113,21 +124,28 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
           <ModalCloseButton />
           <ModalBody>
             {station.connectorDetails.map((connector, index) => (
-              <Box key={index} mt={2}>
-                <Stack direction="row" align="center">
-                  <Badge colorScheme={colorScheme.badge}>
-                    {connector.supplierName}
-                  </Badge>
-                  <Text>{connector.connectorType} Socket</Text>
-                </Stack>
-                <Text>Charge Capacity: {connector.chargeCapacity}</Text>
-                <Text>Max Power Level: {connector.maxPowerLevel}kW</Text>
-                <Text my={2} fontWeight={"bold"}>
-                  Price: {connector.price} RON/kWh
-                </Text>
-                {index < station.connectorDetails.length - 1 && (
-                  <Divider mt={4} />
-                )}
+              <Box key={index}>
+                <Box mt={2}>
+                  <Stack direction="row" align="center">
+                    <Badge colorScheme={colorScheme.badge}>
+                      {connector.supplierName}
+                    </Badge>
+                    <Text>{connector.connectorType} Socket</Text>
+                  </Stack>
+                  <Text>Charge Capacity: {connector.chargeCapacity}</Text>
+                  <Text>Max Power Level: {connector.maxPowerLevel}kW</Text>
+                  <Text my={2} fontWeight={"bold"}>
+                    Price: {connector.price} RON/kWh
+                  </Text>
+                  {index < station.connectorDetails.length - 1 && (
+                    <Divider mt={4} />
+                  )}
+                </Box>
+                <Grid templateColumns={"repeat(3, 1fr)"}>
+                  {connector.connectorsStatuses?.map((status) => (
+                    <ConnectorStatus status={status} />
+                  ))}
+                </Grid>
               </Box>
             ))}
           </ModalBody>

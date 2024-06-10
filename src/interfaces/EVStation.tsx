@@ -35,10 +35,10 @@ interface ConnectorDetail {
   price: number;
   customerChargeLevel: string;
   customerConnectorName: string;
-  connectorStatuses: ConnectorStatus[];
+  connectorsStatuses: ConnectorStatus[];
 }
 
-interface ConnectorStatus {
+export interface ConnectorStatus {
   physicalReference: string;
   state: string;
 }
