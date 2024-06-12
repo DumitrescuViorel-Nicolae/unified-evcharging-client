@@ -7,46 +7,51 @@ import { handleAxiosError } from "../../utils/errorParsing";
 import accountStore from "./accountStore";
 import { RegistrationFormData } from "../../interfaces/RegistrationFormData";
 import appStateStore from "../CommonStore/appStateStore";
+import { LoginResponse } from "../../interfaces/LoginResponse";
+import axiosInstance from "../../axios/axiosInstance";
 
 interface AuthState {
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   userMail: string;
+  isLoggedIn: boolean;
+  registerSucceeded: boolean;
 }
 
 interface AuthActions {
-  isLoggedIn: boolean;
-  registerSucceeded: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (user: RegistrationFormData) => Promise<void>;
+  refreshAccessToken: () => Promise<void>;
+  logout: () => Promise<void>;
+  setLoginStatus: () => void;
 }
 
 const authStore = createStore<AuthState & AuthActions>((set) => ({
   registerSucceeded: false,
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   isLoggedIn: false,
-  user: {
-    id: "",
-    username: "",
-    password: "",
-    email: "",
-    phoneNumber: "",
-    role: "",
-    loading: false,
-    error: null,
-  },
   userMail: "",
 
   login: async (email: string, password: string) => {
-    let response: AxiosResponse<GeneralResponse<string>>;
     try {
-      response = await axiosBasic.post("/Auth/login", { email, password });
+      const response: AxiosResponse<GeneralResponse<LoginResponse>> =
+        await axiosBasic.post("/Auth/login", { email, password });
       const { data } = response.data;
-      set({ token: data });
-      set({ isLoggedIn: true });
-      set({ userMail: email });
+      if (data?.accessToken && data?.refreshToken) {
+        set({
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          isLoggedIn: true,
+          userMail: email,
+        });
+
+        sessionStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+      }
 
       accountStore.getState().getUser(email);
-      toast.success("Logged in successfull!");
+      toast.success("Logged in");
     } catch (error) {
       handleAxiosError(error);
     }
@@ -54,9 +59,10 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
 
   register: async (registrationData: RegistrationFormData) => {
     try {
-      const response = await axiosBasic.post("/Auth/register", {
-        ...registrationData,
-      });
+      const response = await axiosBasic.post(
+        "/Auth/register",
+        registrationData
+      );
       if (response.data.success) {
         toast.success("User registered!");
         appStateStore.getState().setIsAuthModalOpen(false);
@@ -66,6 +72,50 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
     } catch (error) {
       handleAxiosError(error);
     }
+  },
+
+  refreshAccessToken: async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) throw new Error("Please login again");
+
+      const response = await axiosBasic.post("/Auth/refresh", { refreshToken });
+      console.log("respiodsfmnadslfasf", response.data.data);
+      const { data } = response.data;
+
+      sessionStorage.setItem("accessToken", data?.accessToken);
+      localStorage.setItem("refreshToken", data?.refreshToken);
+      set({
+        isLoggedIn: true,
+        accessToken: data?.accessToken,
+        refreshToken: data?.refreshToken,
+      });
+    } catch (error) {
+      set({ isLoggedIn: false, accessToken: null, refreshToken: null });
+      localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("accessToken");
+    }
+  },
+
+  logout: async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) return;
+
+      await axiosInstance.post("/Auth/logout", { refreshToken });
+
+      set({ isLoggedIn: false, accessToken: null, refreshToken: null });
+      localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("accessToken");
+
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      toast.error("Logout failed!");
+    }
+  },
+
+  setLoginStatus: () => {
+    set({ isLoggedIn: true });
   },
 }));
 

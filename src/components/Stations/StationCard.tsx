@@ -117,7 +117,13 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         </CardBody>
       </Card>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
+      <Modal
+        scrollBehavior="inside"
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="3xl"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Connector Details</ModalHeader>

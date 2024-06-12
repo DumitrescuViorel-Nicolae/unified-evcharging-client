@@ -11,6 +11,7 @@ import { BiUser, BiHistory, BiLogOut, BiHeart } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import createSelectors from "../../store/createSelectors";
 import appStateStore from "../../store/CommonStore/appStateStore";
+import authStore from "../../store/UserStore/authStore";
 
 interface UserStateCasesProps {
   isLoggedIn: boolean;
@@ -19,6 +20,9 @@ interface UserStateCasesProps {
 const UserStateCases: React.FC<UserStateCasesProps> = ({ isLoggedIn }) => {
   const useAppStateStore = createSelectors(appStateStore);
   const setAuthModal = useAppStateStore.use.setIsAuthModalOpen();
+
+  const useAuthStore = createSelectors(authStore);
+  const logout = useAuthStore.use.logout();
 
   const returnUserAccount = () => {
     // Return a menu with user-related links
@@ -50,7 +54,12 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({ isLoggedIn }) => {
               History
             </MenuItem>
           </Link>
-          <MenuItem icon={<BiLogOut fontSize={"1.5rem"} />}>Log out</MenuItem>
+          <MenuItem
+            onClick={async () => await logout()}
+            icon={<BiLogOut fontSize={"1.5rem"} />}
+          >
+            Log out
+          </MenuItem>
         </MenuList>
       </Menu>
     );

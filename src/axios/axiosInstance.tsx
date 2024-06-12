@@ -8,12 +8,20 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const jwtToken = authStore.getState().token;
+  async (config) => {
+    const { refreshAccessToken, setLoginStatus } = authStore.getState();
+    const accessToken = sessionStorage.getItem("accessToken");
     appStateStore.getState().setIsLoading(true);
 
-    if (jwtToken) {
-      config.headers.Authorization = `Bearer ${jwtToken}`;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      setLoginStatus();
+    } else {
+      await refreshAccessToken();
+      const newAccessToken = authStore.getState().accessToken;
+      if (newAccessToken) {
+        config.headers.Authorization = `Bearer ${newAccessToken}`;
+      }
     }
     return config;
   },
@@ -22,16 +30,25 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle token expiration and refresh
 axiosInstance.interceptors.response.use(
   (response) => {
-    // Do something with response data
     appStateStore.getState().setIsLoading(false);
     return response;
   },
-  (error) => {
-    // Handle error responses
+  async (error) => {
+    const originalRequest = error.config;
     appStateStore.getState().setIsLoading(false);
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      await authStore.getState().refreshAccessToken();
+      console.log("eredfdas");
+      const newAccessToken = authStore.getState().accessToken;
+      if (newAccessToken) {
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest);
+      }
+    }
     return Promise.reject(error);
   }
 );

@@ -23,12 +23,15 @@ const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
   getEVStation: async () => {
     try {
-      const response = await axiosBasic.get("/EVStation/getEVInfrastructure", {
-        params: {
-          latitude: accountStore.getState().geolocation?.latitude,
-          longitude: accountStore.getState().geolocation?.longitude,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/EVStation/getEVInfrastructure",
+        {
+          params: {
+            latitude: accountStore.getState().geolocation?.latitude,
+            longitude: accountStore.getState().geolocation?.longitude,
+          },
+        }
+      );
       set({ evStations: response.data });
     } catch (error) {
       handleAxiosError(error);

@@ -1,5 +1,4 @@
 export interface LoginResponse {
-  flag: boolean;
-  token: string;
-  message: string;
+  accessToken: string;
+  refreshToken: string;
 }
