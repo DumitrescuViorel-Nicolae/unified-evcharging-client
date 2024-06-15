@@ -106,7 +106,6 @@ const evStationStore = createStore<EVStationStore>((set) => ({
         `${import.meta.env.VITE_MAPBOX_DIRECTIONS_URL}/${coords}?${params}`
       );
       const data = await response.json();
-      console.log(data);
 
       if (data.routes) {
         set({ directions: data.routes[0].geometry });

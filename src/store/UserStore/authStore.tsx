@@ -80,7 +80,6 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
       if (!refreshToken) throw new Error("Please login again");
 
       const response = await axiosBasic.post("/Auth/refresh", { refreshToken });
-      console.log("respiodsfmnadslfasf", response.data.data);
       const { data } = response.data;
 
       sessionStorage.setItem("accessToken", data?.accessToken);

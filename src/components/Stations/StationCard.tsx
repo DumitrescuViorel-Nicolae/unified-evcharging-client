@@ -56,8 +56,6 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
     onOpen();
   };
 
-  console.log(station);
-
   return (
     <>
       <Card

@@ -42,7 +42,6 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       await authStore.getState().refreshAccessToken();
-      console.log("eredfdas");
       const newAccessToken = authStore.getState().accessToken;
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

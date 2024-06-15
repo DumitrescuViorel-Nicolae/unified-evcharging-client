@@ -40,7 +40,6 @@ const MapGL = () => {
   const handleMarkerClick = (station: EVStation) => {
     if (userLocation) {
       getDirections(userLocation, station.position);
-      console.log("directions", directions);
       setViewState({
         ...viewState,
         longitude: station.position.longitude,

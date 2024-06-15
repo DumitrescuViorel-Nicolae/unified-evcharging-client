@@ -21,7 +21,7 @@ export const HomePage = () => {
   useMemo(() => {
     getEVStations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userLocation]);
+  }, [userLocation, getEVStations]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,8 +32,6 @@ export const HomePage = () => {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
-
-  console.log(evStations);
 
   return (
     <Container maxW="1100px" mt={8}>

@@ -86,7 +86,6 @@ const RegistrationForm = () => {
       data.role = "User";
     }
     registerApi(data);
-    console.log(registerSucceeded);
     if (registerSucceeded) {
       setIsModalOpen(false);
       reset();
