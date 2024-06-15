@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, Select, Input, Button, Collapse, Flex } from "@chakra-ui/react";
 import { FilterValues } from "../../interfaces/FilterValues";
+import createSelectors from "../../store/createSelectors";
+import evStationStore from "../../store/EVStationStore/evStationStore";
 
 interface FilterProps {
   // onApplyFilters: (filters: FilterValues) => void;
@@ -9,6 +11,16 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = () => {
   const [filters, setFilters] = useState<FilterValues>({});
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+  const useEVStationStore = createSelectors(evStationStore);
+  const getTypes = useEVStationStore.use.getConnectorTypes();
+  const types = useEVStationStore.use.connectorTypes();
+
+  // LOCAL STATE
+  useMemo(() => {
+    getTypes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -57,14 +69,18 @@ const Filter: React.FC<FilterProps> = () => {
       </Button>
       <Collapse in={isExpanded} animateOpacity>
         <Flex p={4} borderRadius="md" overflowX="auto">
-          <Flex flexGrow={1} direction="row">
+          <Flex flexGrow={3} direction="row">
             <Select
-              placeholder="Connector Type"
+              placeholder="Select connector type"
               name="connectorType"
               onChange={handleChange}
-              w={"md"}
+              w={"xl"}
+              color={"complementary.300"}
+              bg={"primary.600"}
             >
-              {/* Options for connector type */}
+              {types.map((type) => (
+                <option value={type.id}>{type.description}</option>
+              ))}
             </Select>
             <Select
               placeholder="Brand"

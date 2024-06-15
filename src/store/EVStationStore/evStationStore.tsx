@@ -1,26 +1,33 @@
 import { createStore } from "zustand";
 import { EVStation } from "../../interfaces/EVStation";
 import { handleAxiosError } from "../../utils/errorParsing";
-import axiosBasic from "../../axios/axiosBasic";
 import PaymentTransaction from "../../interfaces/Transactions";
 import axiosInstance from "../../axios/axiosInstance";
 import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
 import accountStore from "../UserStore/accountStore";
+import { Option } from "../../interfaces/OptionsData";
 
 export interface EVStationStore {
   evStations: EVStation[];
+  transactions: PaymentTransaction[] | [];
+  directions: any;
+  connectorTypes: Option[];
+
   getEVStation: () => void;
+  getTransactions: () => void;
+  getConnectorTypes: () => void;
   deleteEVStation: (stationID: number) => void;
   makePayment: (stripeAccountId: string) => void;
-  transactions: PaymentTransaction[] | [];
-  getTransactions: () => void;
   getDirectionToStation: (start: Coordinates, end: Coordinates) => void;
-  directions: any;
 }
 
 const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
+  connectorTypes: [],
+  transactions: [],
+  directions: null,
+
   getEVStation: async () => {
     try {
       const response = await axiosInstance.get(
@@ -37,7 +44,7 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       handleAxiosError(error);
     }
   },
-  transactions: [],
+
   getTransactions: async () => {
     try {
       const response = await axiosInstance.get("/Payment/transactions");
@@ -46,6 +53,16 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       handleAxiosError(error);
     }
   },
+
+  getConnectorTypes: async () => {
+    try {
+      const response = await axiosInstance.get("/EVStation/getEVConnectorType");
+      set({ connectorTypes: [...new Set<Option>(response.data)] });
+    } catch (error) {
+      handleAxiosError(error);
+    }
+  },
+
   makePayment: async (stripeAccountID) => {
     try {
       const response = await axiosInstance.post(
@@ -61,6 +78,7 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       handleAxiosError(error);
     }
   },
+
   deleteEVStation: async (stationID) => {
     try {
       const response = await axiosInstance.delete(
@@ -76,6 +94,7 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       handleAxiosError(error);
     }
   },
+
   getDirectionToStation: async (start: Coordinates, end: Coordinates) => {
     try {
       const coords = `${start.longitude},${start.latitude};${end.longitude},${end.latitude}`;
@@ -96,7 +115,6 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       handleAxiosError(error);
     }
   },
-  directions: null,
 }));
 
 export default evStationStore;
