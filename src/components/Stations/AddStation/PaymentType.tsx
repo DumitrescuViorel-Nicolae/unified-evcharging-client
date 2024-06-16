@@ -11,6 +11,7 @@ import {
   Button,
   VStack,
   Checkbox,
+  Tooltip,
 } from "@chakra-ui/react";
 import { MdAdd, MdDelete } from "react-icons/md";
 import { useFieldArray, useFormContext } from "react-hook-form";
@@ -33,48 +34,46 @@ const PaymentTypesSection: React.FC<PaymentTypesSectionProps> = ({
   });
 
   return (
-    <VStack align="start" mt={8}>
-      <FormLabel>
-        {name === "paymentMethods.ePayment"
-          ? "ePayment Methods"
-          : "Other Payment Methods"}
-      </FormLabel>
+    <VStack w={"30rem"} align="start" mt={8}>
+      <Tooltip label="Digital (card visa, google pay) or other methods (rfid card, cash)">
+        <FormLabel>
+          {name === "paymentMethods.ePayment"
+            ? "Digital Payment Methods"
+            : "Other Payment Methods"}
+        </FormLabel>
+      </Tooltip>
+
       <FormControl isInvalid={!!errors?.accept}>
         <Checkbox {...register(`${name}.accept`)}>
           Accept{" "}
-          {name === "paymentMethods.ePayment" ? "ePayment" : "Other Payments"}
+          {name === "paymentMethods.ePayment"
+            ? "Digital Payment"
+            : "Other Payments"}
         </Checkbox>
         <FormErrorMessage>{errors?.accept?.message}</FormErrorMessage>
       </FormControl>
       {fields.map((field, index) => (
         <Box key={field.id} w="full" p={2}>
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-            <GridItem colSpan={3}>
-              <FormControl isInvalid={!!errors?.types?.type?.[index]}>
-                <FormLabel>
-                  {name === "paymentMethods.ePayment"
-                    ? "ePayment Type"
-                    : "Other Payment Type"}
-                </FormLabel>
-                <Input {...register(`${name}.types.type.${index}`)} />
-                <FormErrorMessage>
-                  {errors?.types?.type?.[index]?.message}
-                </FormErrorMessage>
-              </FormControl>
-            </GridItem>
-            <GridItem colSpan={1}>
-              <IconButton
-                aria-label={`Remove ${
-                  name === "paymentMethods.ePayment"
-                    ? "ePayment"
-                    : "Other Payment"
-                } Type`}
-                icon={<MdDelete />}
-                onClick={() => remove(index)}
-                mt={4}
-              />
-            </GridItem>
-          </Grid>
+          <FormControl isInvalid={!!errors?.types?.type?.[index]}>
+            <FormLabel>
+              {name === "paymentMethods.ePayment"
+                ? "Payment method"
+                : "Other Payment Type"}
+            </FormLabel>
+            <Input {...register(`${name}.types.type.${index}`)} />
+            <FormErrorMessage>
+              {errors?.types?.type?.[index]?.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <IconButton
+            aria-label={`Remove ${
+              name === "paymentMethods.ePayment" ? "ePayment" : "Other Payment"
+            } Type`}
+            icon={<MdDelete />}
+            onClick={() => remove(index)}
+            mt={4}
+          />
         </Box>
       ))}
       <Button onClick={() => append({ type: "" })} leftIcon={<MdAdd />} mt={4}>

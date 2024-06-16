@@ -22,7 +22,7 @@ const AddStationModal = () => {
   return (
     <Modal isOpen={isAddStationModalOpen} onClose={handleAddStationModalClose}>
       <ModalOverlay />
-      <ModalContent maxW={"90%"}>
+      <ModalContent maxW={"60%"}>
         <ModalHeader>Add EV Station</ModalHeader>
         <ModalCloseButton />
         <ModalBody>

@@ -14,7 +14,6 @@ export interface AccountStore {
   geolocation: Coordinates | null;
   getGeolocation: () => void;
 }
-console.log("rerenders");
 
 const accountStore = createStore<AccountStore>((set) => ({
   user: {

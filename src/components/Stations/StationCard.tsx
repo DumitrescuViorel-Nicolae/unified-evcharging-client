@@ -123,7 +123,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         size="3xl"
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={"complementary.300"} textColor={"primary.600"}>
           <ModalHeader>Connector Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

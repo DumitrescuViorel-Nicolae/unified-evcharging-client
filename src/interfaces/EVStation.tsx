@@ -18,7 +18,7 @@ interface Address {
 }
 
 interface Contacts {
-  phone: string;
+  adminPhone: string;
   website: string;
 }
 
@@ -27,7 +27,7 @@ interface Position {
   longitude: number;
 }
 
-interface ConnectorDetail {
+export interface ConnectorDetail {
   supplierName: string;
   connectorType: string;
   chargeCapacity: string;

@@ -16,7 +16,7 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
             <Text textAlign={"center"} textColor={"#1CB722"}>
               Status: Available
             </Text>
-            <Button justifyContent={"center"} mt={2} bg={"accent.100"}>
+            <Button justifyContent={"center"} my={2} bg={"accent.100"}>
               Select
             </Button>
           </Flex>
@@ -27,8 +27,8 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
             <Text textAlign={"center"} textColor={"#FB1C1C"}>
               Status: Occupied
             </Text>
-            <Button mt={2} disabled>
-              Notify me
+            <Button my={2} isDisabled={true}>
+              Select
             </Button>
           </Flex>
         );
@@ -39,8 +39,8 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
             <Text textColor={"#B3BF1C"} textAlign={"center"}>
               Status: Out of service
             </Text>
-            <Button mt={2} disabled>
-              Notify me
+            <Button my={2} isDisabled={true}>
+              Select
             </Button>
           </Flex>
         );
