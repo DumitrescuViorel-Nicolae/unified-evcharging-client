@@ -8,6 +8,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { Box, Button, Divider, Text } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import accountStore from "../../store/UserStore/accountStore";
+import StationCard from "../Stations/StationCard/StationCard";
 
 const MapGL = () => {
   const useEvStore = createSelectors(evStationStore);
@@ -113,11 +114,12 @@ const MapGL = () => {
             latitude={selectedStation.position.latitude}
             closeButton={true}
             closeOnClick={true}
-            style={{ width: "300px", height: "500px" }}
+            style={{ width: "400px", height: "500px" }}
             onClose={() => setSelectedStation(null)}
+            maxWidth="400px"
             anchor="top"
           >
-            <div>
+            {/* <div>
               <Text className="text-2xl">{selectedStation.brand}</Text>
               <Divider />
               <Text className="text-lg">{selectedStation.address.street}</Text>
@@ -130,7 +132,8 @@ const MapGL = () => {
                   Navigate with Google Maps
                 </a>
               </Button>
-            </div>
+            </div> */}
+            <StationCard station={selectedStation} />
           </Popup>
         )}
       </ReactMapGL>

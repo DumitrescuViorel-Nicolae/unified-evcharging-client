@@ -20,7 +20,11 @@ const AddStationModal = () => {
   };
 
   return (
-    <Modal isOpen={isAddStationModalOpen} onClose={handleAddStationModalClose}>
+    <Modal
+      scrollBehavior="inside"
+      isOpen={isAddStationModalOpen}
+      onClose={handleAddStationModalClose}
+    >
       <ModalOverlay />
       <ModalContent maxW={"60%"}>
         <ModalHeader>Add EV Station</ModalHeader>

@@ -24,7 +24,6 @@ import {
 import { EVStation } from "../../../interfaces/EVStation";
 import React from "react";
 import createSelectors from "../../../store/createSelectors";
-import appStateStore from "../../../store/CommonStore/appStateStore";
 import CheckoutForm from "./StationsPayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -42,9 +41,6 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
     text: "white",
     badge: "teal",
   };
-
-  const useAppStateStore = createSelectors(appStateStore);
-  const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
 
   const useAccountStore = createSelectors(accountStore);
   const userLocation = useAccountStore.use.geolocation();
