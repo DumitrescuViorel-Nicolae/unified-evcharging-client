@@ -11,7 +11,7 @@ interface UserDetails {
   role?: string;
 }
 
-interface CompanyDetails {
+export interface CompanyDetails {
   website?: string;
   companyName?: string;
   registrationNumber?: string;

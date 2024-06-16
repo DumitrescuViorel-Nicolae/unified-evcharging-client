@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
 import accountStore from "../UserStore/accountStore";
 import { Option } from "../../interfaces/OptionsData";
+import { AddEVStationDTO } from "../../interfaces/AddEVStation";
 
 export interface EVStationStore {
   evStations: EVStation[];
@@ -15,6 +16,7 @@ export interface EVStationStore {
   connectorTypes: Option[];
 
   getEVStation: () => void;
+  addEVStation: (evStationToAdd: AddEVStationDTO) => void;
   getTransactions: () => void;
   getConnectorTypes: () => void;
   deleteEVStation: (stationID: number) => void;
@@ -40,6 +42,23 @@ const evStationStore = createStore<EVStationStore>((set) => ({
         }
       );
       set({ evStations: response.data });
+    } catch (error) {
+      handleAxiosError(error);
+    }
+  },
+
+  addEVStation: async (evStationToAdd: AddEVStationDTO) => {
+    try {
+      const response = await axiosInstance.post(
+        "/EVStation/addEVStation",
+        evStationToAdd
+      );
+
+      if (response.data.success) {
+        toast.success("Station added!");
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       handleAxiosError(error);
     }

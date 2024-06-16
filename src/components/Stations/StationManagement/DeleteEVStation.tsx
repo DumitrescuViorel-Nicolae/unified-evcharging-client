@@ -6,11 +6,10 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import createSelectors from "../../store/createSelectors";
-import evStationStore from "../../store/EVStationStore/evStationStore";
+import createSelectors from "../../../store/createSelectors";
+import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 const DeleteEVStationDialog = ({ isOpen, onClose, stationID }) => {
   const cancelRef = useRef();

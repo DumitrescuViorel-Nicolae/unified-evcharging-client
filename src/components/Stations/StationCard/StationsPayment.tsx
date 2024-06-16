@@ -15,11 +15,11 @@ import {
   Stack,
   Input,
 } from "@chakra-ui/react";
-import appStateStore from "../../store/CommonStore/appStateStore";
-import createSelectors from "../../store/createSelectors";
+import appStateStore from "../../../store/CommonStore/appStateStore";
+import createSelectors from "../../../store/createSelectors";
 import "react-credit-cards/es/styles-compiled.css";
 import Cards from "react-credit-cards";
-import evStationStore from "../../store/EVStationStore/evStationStore";
+import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 interface CheckoutFormProps {
   amount: number;

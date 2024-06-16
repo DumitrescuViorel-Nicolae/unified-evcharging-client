@@ -60,7 +60,10 @@ const PaymentTypesSection: React.FC<PaymentTypesSectionProps> = ({
                 ? "Payment method"
                 : "Other Payment Type"}
             </FormLabel>
-            <Input {...register(`${name}.types.type.${index}`)} />
+            <Input
+              placeholder="Add visa, google pay, apple pay"
+              {...register(`${name}.types.type.${index}` as const)}
+            />
             <FormErrorMessage>
               {errors?.types?.type?.[index]?.message}
             </FormErrorMessage>

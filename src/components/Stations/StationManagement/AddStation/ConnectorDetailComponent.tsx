@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { AddEVStationDTO } from "../../../interfaces/AddEVStation";
+import { AddEVStationDTO } from "../../../../interfaces/AddEVStation";
 
 interface ConnectorDetailProps {
   field: any;

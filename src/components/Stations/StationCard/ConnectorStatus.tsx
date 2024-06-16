@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { ConnectorStatus } from "../../interfaces/EVStation";
+import { ConnectorStatus } from "../../../interfaces/EVStation";
 
 interface ConnectorStatusProps {
   status: ConnectorStatus;

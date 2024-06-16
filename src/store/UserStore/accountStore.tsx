@@ -5,6 +5,7 @@ import { handleAxiosError } from "../../utils/errorParsing";
 import appStateStore from "../CommonStore/appStateStore";
 import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
+import { CompanyDetails } from "../../interfaces/RegistrationFormData";
 
 export interface AccountStore {
   user: User;
@@ -13,6 +14,9 @@ export interface AccountStore {
   clearUser: () => void;
   geolocation: Coordinates | null;
   getGeolocation: () => void;
+  company: CompanyDetails | null;
+  getCompany: () => void;
+  getUserFromLocalStorage: () => User;
 }
 
 const accountStore = createStore<AccountStore>((set) => ({
@@ -26,6 +30,7 @@ const accountStore = createStore<AccountStore>((set) => ({
     loading: false,
     error: null,
   },
+  company: null,
   geolocation: null,
   setUser: async (user) => {
     try {
@@ -63,11 +68,47 @@ const accountStore = createStore<AccountStore>((set) => ({
         `/Account/getAccount?email=${email}`
       );
       const user = response.data.data;
+
+      if (user.id) {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+
       set({ user: user });
     } catch (error) {
       handleAxiosError(error);
     }
   },
+
+  getUserFromLocalStorage: () => {
+    if (sessionStorage.getItem("accessToken")) {
+      return JSON.parse(localStorage.getItem("user") as string);
+    } else {
+      toast.error("Please login again");
+    }
+  },
+
+  getCompany: async () => {
+    try {
+      const currentUser = accountStore.getState().user;
+      let response;
+
+      if (!currentUser.id) {
+        const user = accountStore.getState().getUserFromLocalStorage();
+        response = await axiosInstance.get(
+          `/EVStation/getCompanyByUserId?id=${user.id}`
+        );
+      } else {
+        response = await axiosInstance.get(
+          `/EVStation/getCompanyByUserId?id=${currentUser.id}`
+        );
+      }
+      const companyDetails = response.data.data;
+      set({ company: companyDetails });
+    } catch (error) {
+      handleAxiosError(error);
+    }
+  },
+
   getGeolocation: () => {
     const handleLocationSuccess = (position: {
       coords: { latitude: number; longitude: number };
@@ -94,6 +135,7 @@ const accountStore = createStore<AccountStore>((set) => ({
       toast.error("Browser does not support geolocation :(");
     }
   },
+
   clearUser: () =>
     set(() => ({
       user: {

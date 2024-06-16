@@ -7,8 +7,8 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import AddStationForm from "./AddStationForm";
-import createSelectors from "../../../store/createSelectors";
-import appStateStore from "../../../store/CommonStore/appStateStore";
+import createSelectors from "../../../../store/createSelectors";
+import appStateStore from "../../../../store/CommonStore/appStateStore";
 
 const AddStationModal = () => {
   const useAppState = createSelectors(appStateStore);

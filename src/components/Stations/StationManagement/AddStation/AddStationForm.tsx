@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   FormControl,
   FormLabel,
@@ -20,9 +20,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   AddConnectorDetailDTO,
   AddEVStationDTO,
-} from "../../../interfaces/AddEVStation";
+} from "../../../../interfaces/AddEVStation";
 import PaymentTypesSection from "./PaymentType";
 import ConnectorDetailComponent from "./ConnectorDetailComponent";
+import createSelectors from "../../../../store/createSelectors";
+import accountStore from "../../../../store/UserStore/accountStore";
+import evStationStore from "../../../../store/EVStationStore/evStationStore";
 
 const schema = yup.object().shape({
   brand: yup.string().required("Brand is required"),
@@ -80,6 +83,12 @@ const AddStationForm: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
+  const useAccountStore = createSelectors(accountStore);
+  const useEvStationStore = createSelectors(evStationStore);
+  const company = useAccountStore.use.company();
+  const getCompany = useAccountStore.use.getCompany();
+  const addEVStation = useEvStationStore.use.addEVStation();
+
   const {
     register,
     handleSubmit,
@@ -96,7 +105,16 @@ const AddStationForm: React.FC = () => {
     name: "connectorDetails",
   });
 
-  const onSubmit: SubmitHandler<AddEVStationDTO> = (data) => console.log(data);
+  useMemo(() => {
+    getCompany();
+  }, [getCompany]);
+
+  const onSubmit: SubmitHandler<AddEVStationDTO> = (data) => {
+    //const companyName = company?.companyName;
+    const companyName = "GreenEnergy Inc.";
+    const evStationToSubmit = { ...data, companyName: companyName };
+    addEVStation(evStationToSubmit);
+  };
   const onError = (errors: any) => {
     console.log("Form Errors:", errors);
   };

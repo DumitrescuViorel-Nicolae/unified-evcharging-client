@@ -21,15 +21,15 @@ import {
   Spacer,
   Grid,
 } from "@chakra-ui/react";
-import { EVStation } from "../../interfaces/EVStation";
+import { EVStation } from "../../../interfaces/EVStation";
 import React from "react";
-import createSelectors from "../../store/createSelectors";
-import appStateStore from "../../store/CommonStore/appStateStore";
+import createSelectors from "../../../store/createSelectors";
+import appStateStore from "../../../store/CommonStore/appStateStore";
 import CheckoutForm from "./StationsPayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import ConnectorStatus from "./ConnectorStatus";
-import accountStore from "../../store/UserStore/accountStore";
+import accountStore from "../../../store/UserStore/accountStore";
 
 interface StationCardProps {
   station: EVStation;

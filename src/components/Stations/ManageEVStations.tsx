@@ -30,9 +30,9 @@ import { MdEdit, MdDelete } from "react-icons/md"; // Import edit and delete ico
 import { EVStation } from "../../interfaces/EVStation";
 import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
-import DeleteEVStation from "./DeleteEVStation";
+import DeleteEVStation from "./StationManagement/DeleteEVStation";
 import appStateStore from "../../store/CommonStore/appStateStore";
-import AddStationModal from "./AddStation/AddStationModal";
+import AddStationModal from "./StationManagement/AddStation/AddStationModal";
 
 const ManageEVStations = () => {
   const useEVStore = createSelectors(evStationStore);
