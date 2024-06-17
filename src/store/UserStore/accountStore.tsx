@@ -9,6 +9,7 @@ import { CompanyDetails } from "../../interfaces/RegistrationFormData";
 
 export interface AccountStore {
   user: User;
+  wallet: number;
   getUser: (email: string) => void;
   setUser: (user: User) => void;
   clearUser: () => void;
@@ -30,22 +31,31 @@ const accountStore = createStore<AccountStore>((set) => ({
     loading: false,
     error: null,
   },
+  wallet: 0,
   company: null,
   geolocation: null,
   setUser: async (user) => {
     try {
       const currentUser = accountStore.getState().user;
       appStateStore.getState().setIsUpdatingUser(true);
-      const response = await axiosInstance.put("/Account/updateAccount", {
+      const updatedUser = {
         ...currentUser,
         username: user.username,
         email: user.email,
         phoneNumber: user.phoneNumber,
+      };
+
+      console.log(updatedUser);
+
+      const response = await axiosInstance.put("/Account/updateAccount", {
+        ...updatedUser,
         password: "",
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
+        set({ user: updatedUser });
+        localStorage.setItem("user", JSON.stringify(updatedUser));
       } else {
         toast.error(response.data.message);
       }
@@ -81,7 +91,9 @@ const accountStore = createStore<AccountStore>((set) => ({
 
   getUserFromLocalStorage: () => {
     if (sessionStorage.getItem("accessToken")) {
-      return JSON.parse(localStorage.getItem("user") as string);
+      const user = JSON.parse(localStorage.getItem("user") as string);
+      set({ user: user });
+      return user;
     } else {
       toast.error("Please login again");
     }
@@ -136,7 +148,7 @@ const accountStore = createStore<AccountStore>((set) => ({
     }
   },
 
-  clearUser: () =>
+  clearUser: () => {
     set(() => ({
       user: {
         id: "",
@@ -148,7 +160,9 @@ const accountStore = createStore<AccountStore>((set) => ({
         loading: false,
         error: null,
       },
-    })),
+    }));
+    localStorage.removeItem("user");
+  },
 }));
 
 export default accountStore;

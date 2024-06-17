@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Heading,
@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Stack,
   SimpleGrid,
   FormErrorMessage,
 } from "@chakra-ui/react";
@@ -57,7 +56,7 @@ const AccountDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (user.username != "") {
       setValue("username", user.username);
       setValue("email", user.email);
       setValue("phoneNumber", user.phoneNumber);
@@ -66,7 +65,7 @@ const AccountDetails = () => {
 
   const handleEditClick = (e: Event) => {
     e.preventDefault();
-    setIsEditing(true);
+    setIsEditing(!isEditing);
   };
 
   const onSubmit = async (data) => {
@@ -128,10 +127,11 @@ const AccountDetails = () => {
         </SimpleGrid>
 
         <Box mt="6" textAlign="center">
+          <Button mr={2} isDisabled={!isEditing} type="submit" bg="accent.200">
+            Save
+          </Button>
           {isEditing ? (
-            <Button type="submit" bg="accent.200">
-              Save
-            </Button>
+            <Button onClick={handleEditClick}>Cancel</Button>
           ) : (
             <Button type="button" onClick={handleEditClick} bg="accent.100">
               Edit Profile

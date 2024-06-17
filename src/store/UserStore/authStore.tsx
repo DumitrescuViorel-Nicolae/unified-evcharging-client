@@ -106,6 +106,7 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
       set({ isLoggedIn: false, accessToken: null, refreshToken: null });
       localStorage.removeItem("refreshToken");
       sessionStorage.removeItem("accessToken");
+      accountStore.getState().clearUser();
 
       toast.success("Logged out successfully!");
     } catch (error) {
@@ -114,6 +115,11 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
   },
 
   setLoginStatus: () => {
+    const setUserFromLocalStorage = accountStore
+      .getState()
+      .getUserFromLocalStorage();
+
+    setUserFromLocalStorage;
     set({ isLoggedIn: true });
   },
 }));
