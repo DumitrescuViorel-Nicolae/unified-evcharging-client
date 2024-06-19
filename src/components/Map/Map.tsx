@@ -5,7 +5,7 @@ import evStationStore from "../../store/EVStationStore/evStationStore";
 import { FaChargingStation } from "react-icons/fa";
 import { GiPositionMarker } from "react-icons/gi";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Box, Button, Divider, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { EVStation } from "../../interfaces/EVStation";
 import accountStore from "../../store/UserStore/accountStore";
 import StationCard from "../Stations/StationCard/StationCard";
