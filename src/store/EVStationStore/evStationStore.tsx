@@ -8,6 +8,7 @@ import { Coordinates } from "../../interfaces/Coordinates";
 import accountStore from "../UserStore/accountStore";
 import { Option } from "../../interfaces/OptionsData";
 import { AddEVStationDTO } from "../../interfaces/AddEVStation";
+import { stations } from "../../utils/mock";
 
 export interface EVStationStore {
   evStations: EVStation[];
@@ -43,7 +44,9 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       );
       set({ evStations: response.data });
     } catch (error) {
-      handleAxiosError(error);
+      //handleAxiosError(error);
+      const mockStations = stations as EVStation[];
+      set({ evStations: mockStations });
     }
   },
 

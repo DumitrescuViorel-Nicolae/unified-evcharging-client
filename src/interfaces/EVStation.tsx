@@ -7,6 +7,8 @@ export interface EVStation {
   distance: number;
   contacts: Contacts;
   position: Position;
+  companyName: string;
+  imageURL: string | null;
   connectorDetails: ConnectorDetail[];
   paymentMethods: PaymentMethod;
 }
