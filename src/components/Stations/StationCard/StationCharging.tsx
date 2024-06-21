@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Text,
 } from "@chakra-ui/react";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
@@ -18,10 +19,16 @@ import { useState } from "react";
 import moment from "moment";
 import appStateStore from "../../../store/CommonStore/appStateStore";
 import createSelectors from "../../../store/createSelectors";
+import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 const StationCharging = ({ onClose, onOpen, isOpen }) => {
   const [selectedTime, setSelectedTime] = useState(moment());
   const [dayOption, setDayOption] = useState("today");
+
+  const useEVStationStore = createSelectors(evStationStore);
+  const selectedDetail = useEVStationStore.use.selectedConnector();
+
+  console.log("first", selectedDetail);
 
   const handleTimeChange = (time) => {
     setSelectedTime(time);
@@ -41,6 +48,8 @@ const StationCharging = ({ onClose, onOpen, isOpen }) => {
     return differenceInMinutes;
   };
 
+  const calculatePayment = () => {};
+
   const useAppStateStore = createSelectors(appStateStore);
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
 
@@ -51,44 +60,52 @@ const StationCharging = ({ onClose, onOpen, isOpen }) => {
         <ModalHeader>Connector Details</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Flex alignItems="center">
-            <Card mr={4}>
-              <CardBody textAlign={"center"}>
-                <Flex alignItems="center">
-                  I need my vehicle{" "}
-                  <Select
-                    value={dayOption}
-                    onChange={handleDayOptionChange}
-                    mx={2}
-                  >
-                    <option value="today">today</option>
-                    <option value="tomorrow">tomorrow</option>
-                  </Select>{" "}
-                  at{" "}
-                  <Datetime
-                    value={selectedTime}
-                    dateFormat={false}
-                    timeFormat="HH:mm"
-                    onChange={handleTimeChange}
-                    inputProps={{ style: { marginLeft: "10px" } }}
-                  />
-                </Flex>
-                <Button
-                  w={"15rem"}
-                  mt={3}
-                  bg={"accent.100"}
-                  onClick={() => {
-                    const timeDifference = calculateTimeDifference();
-                    console.log(
-                      `Time difference in minutes: ${timeDifference}`
-                    );
-                    setIsOpen(true);
-                  }}
-                >
-                  Start Charging
-                </Button>
-              </CardBody>
-            </Card>
+          <Flex flexDirection={"column"} alignItems={"center"}>
+            <Flex alignItems="center">
+              <Card mr={4}>
+                <CardBody textAlign={"center"}>
+                  <Flex alignItems="center">
+                    <Text w={"18rem"}> I need my vehicle </Text>
+                    <Select
+                      value={dayOption}
+                      onChange={handleDayOptionChange}
+                      mx={2}
+                    >
+                      <option value="today">today</option>
+                      <option value="tomorrow">tomorrow</option>
+                    </Select>{" "}
+                    at{" "}
+                    <Datetime
+                      value={selectedTime}
+                      dateFormat={false}
+                      timeFormat="HH:mm"
+                      onChange={handleTimeChange}
+                      inputProps={{
+                        style: { marginLeft: "10px", width: "5rem" },
+                      }}
+                    />
+                  </Flex>
+                </CardBody>
+              </Card>
+              <Card>
+                <CardBody>
+                  <Text fontSize={"xl"}>Summary</Text>
+                  <Text fontSize={"medium"}>{selectedDetail?.price}</Text>
+                </CardBody>
+              </Card>
+            </Flex>
+            <Button
+              w={"15rem"}
+              mt={3}
+              bg={"accent.100"}
+              onClick={() => {
+                const timeDifference = calculateTimeDifference();
+                console.log(`Time difference in minutes: ${timeDifference}`);
+                setIsOpen(true);
+              }}
+            >
+              Start Charging
+            </Button>
           </Flex>
         </ModalBody>
         <ModalFooter>

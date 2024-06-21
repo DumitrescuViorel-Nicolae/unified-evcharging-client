@@ -34,19 +34,19 @@ export const HomePage = () => {
   };
 
   return (
-    <Container maxW="1100px" mt={8}>
+    <Container maxW="100rem" mt={8}>
       <Box p={4} borderWidth="1px" borderRadius="lg" shadow="md">
-        <SimpleGrid justifyItems={"center"} columns={[1, 2]} spacing={4}>
+        <SimpleGrid justifyItems={"center"} columns={[1, 3]} spacing={4}>
           {evStations.map((station) => (
             <StationCard key={Math.random()} station={station} />
           ))}
         </SimpleGrid>
       </Box>
-      {/* <Link to={"/map"}> */}
       <Button
         position="fixed"
-        bottom="20px"
-        left="50%"
+        top="60%"
+        right="90%"
+        width={"120px"}
         transform="translateX(-50%)"
         bg="accent.200"
         zIndex={1000}
@@ -65,8 +65,30 @@ export const HomePage = () => {
         <SlEnergy fontSize={20} style={{ marginRight: "8px" }} />
         Map
       </Button>
-      {/* </Link> */}
 
+      <Button
+        position="fixed"
+        top="60%"
+        right="-1%"
+        width={"120px"}
+        transform="translateX(-50%)"
+        bg="accent.200"
+        zIndex={1000}
+        color="complementary.300"
+        paddingX={6}
+        textAlign={"center"}
+        fontWeight="bold"
+        borderRadius="md"
+        boxShadow="md"
+        transition="background-color 0.3s ease"
+        _hover={{
+          bg: "accent.100",
+        }}
+        onClick={handleOpenModal}
+      >
+        <SlEnergy fontSize={20} style={{ marginRight: "8px" }} />
+        Wallet
+      </Button>
       <MapDrawer isOpen={isOpen} onClose={handleCloseModal} />
     </Container>
   );

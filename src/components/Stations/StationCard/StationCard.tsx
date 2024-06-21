@@ -143,7 +143,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
                 </Box>
                 <Grid templateColumns={"repeat(3, 1fr)"}>
                   {connector.connectorsStatuses?.map((status) => (
-                    <ConnectorStatus status={status} />
+                    <ConnectorStatus details={connector} status={status} />
                   ))}
                 </Grid>
               </Box>
@@ -156,6 +156,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Elements stripe={stripePromise}>
         <CheckoutForm
           evStationStripeAccountId={station.stripeAccountID}
