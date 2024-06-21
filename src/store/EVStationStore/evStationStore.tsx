@@ -1,5 +1,5 @@
 import { createStore } from "zustand";
-import { EVStation } from "../../interfaces/EVStation";
+import { ConnectorDetail, EVStation } from "../../interfaces/EVStation";
 import { handleAxiosError } from "../../utils/errorParsing";
 import PaymentTransaction from "../../interfaces/Transactions";
 import axiosInstance from "../../axios/axiosInstance";
@@ -12,11 +12,13 @@ import { stations } from "../../utils/mock";
 
 export interface EVStationStore {
   evStations: EVStation[];
+  selectedConnector: ConnectorDetail | null;
   transactions: PaymentTransaction[] | [];
   directions: any;
   connectorTypes: Option[];
 
   getEVStation: () => void;
+  setSelectedConnector: (selectedConnector: ConnectorDetail) => void;
   addEVStation: (evStationToAdd: AddEVStationDTO) => void;
   getTransactions: () => void;
   getConnectorTypes: () => void;
@@ -27,6 +29,7 @@ export interface EVStationStore {
 
 const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
+  selectedConnector: null,
   connectorTypes: [],
   transactions: [],
   directions: null,
@@ -48,6 +51,10 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       const mockStations = stations as EVStation[];
       set({ evStations: mockStations });
     }
+  },
+
+  setSelectedConnector: (selectedConnector: ConnectorDetail) => {
+    set({ selectedConnector: selectedConnector });
   },
 
   addEVStation: async (evStationToAdd: AddEVStationDTO) => {

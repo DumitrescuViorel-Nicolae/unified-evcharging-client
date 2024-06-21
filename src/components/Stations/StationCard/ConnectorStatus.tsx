@@ -1,13 +1,22 @@
 import { Box, Button, Flex, Text, useDisclosure } from "@chakra-ui/react";
-import { ConnectorStatus } from "../../../interfaces/EVStation";
+import {
+  ConnectorDetail,
+  ConnectorStatus,
+} from "../../../interfaces/EVStation";
 import StationCharging from "./StationCharging";
+import createSelectors from "../../../store/createSelectors";
+import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 interface ConnectorStatusProps {
   status: ConnectorStatus;
+  details: ConnectorDetail;
 }
 const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
   status,
+  details,
 }) => {
+  const useEVStationStore = createSelectors(evStationStore);
+  const setSelectedConnector = useEVStationStore.use.setSelectedConnector();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const interpretStatus = (state: string) => {
@@ -20,7 +29,10 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
               Status: Available
             </Text>
             <Button
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+                setSelectedConnector(details);
+              }}
               justifyContent={"center"}
               my={2}
               bg={"accent.100"}

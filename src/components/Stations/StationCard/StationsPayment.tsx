@@ -74,7 +74,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalOverlay />
+      <ModalOverlay bg={"rgba(0, 0, 0, 0.15)"} />
       <ModalContent>
         <ModalHeader>Payment</ModalHeader>
         <ModalCloseButton />

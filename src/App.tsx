@@ -2,7 +2,7 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/Navigation/NavBar";
 import "react-toastify/dist/ReactToastify.css";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { HomePage } from "./components/Navigation/Home";
 import History from "./components/Account/History";
 import LoadingScreen from "./components/Common/LoadingScreen";
@@ -12,6 +12,7 @@ import MapGL from "./components/Map/Map";
 import createSelectors from "./store/createSelectors";
 import accountStore from "./store/UserStore/accountStore";
 import { useEffect } from "react";
+import Footer from "./components/Navigation/Footer";
 
 const colors = {
   primary: {
@@ -47,18 +48,23 @@ function App() {
 
   return (
     <ChakraProvider theme={theme}>
-      <Router>
-        <NavBar />
-        <LoadingScreen />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/manage-stations" element={<ManageEVStations />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/account" element={<AccountDetails />} />
-          <Route path="/session" element={<AccountDetails />} />
-          <Route path="/map" element={<MapGL />} />
-        </Routes>
-      </Router>
+      <Box display="flex" flexDirection="column" minHeight="100vh">
+        <Router>
+          <NavBar />
+          <LoadingScreen />
+          <Box flex="1">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/manage-stations" element={<ManageEVStations />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/account" element={<AccountDetails />} />
+              <Route path="/session" element={<AccountDetails />} />
+              <Route path="/map" element={<MapGL />} />
+            </Routes>
+          </Box>
+          <Footer />
+        </Router>
+      </Box>
       <ToastContainer />
     </ChakraProvider>
   );

@@ -1,4 +1,5 @@
 import { Box, Container, SimpleGrid, Button } from "@chakra-ui/react";
+import { keyframes } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
@@ -33,10 +34,22 @@ export const HomePage = () => {
     setIsOpen(false);
   };
 
+  const subtlePulse = keyframes`
+  0% {
+    box-shadow: 0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 20px #32CD32;
+  }
+  50% {
+    box-shadow: 0 0 10px #32CD32, 0 0 20px #32CD32, 0 0 30px #32CD32;
+  }
+  100% {
+    box-shadow: 0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 20px #32CD32;
+  }
+`;
+
   return (
-    <Container maxW="1100px" mt={8}>
+    <Container maxW="150rem" mt={8}>
       <Box p={4} borderWidth="1px" borderRadius="lg" shadow="md">
-        <SimpleGrid justifyItems={"center"} columns={[1, 2]} spacing={4}>
+        <SimpleGrid justifyItems={"center"} columns={[1, 4]} spacing={4}>
           {evStations.map((station) => (
             <StationCard key={Math.random()} station={station} />
           ))}
@@ -45,7 +58,7 @@ export const HomePage = () => {
       {/* <Link to={"/map"}> */}
       <Button
         position="fixed"
-        bottom="20px"
+        bottom="5rem"
         left="50%"
         transform="translateX(-50%)"
         bg="accent.200"
@@ -55,8 +68,8 @@ export const HomePage = () => {
         textAlign={"center"}
         fontWeight="bold"
         borderRadius="md"
-        boxShadow="md"
         transition="background-color 0.3s ease"
+        animation={`${subtlePulse} 2s infinite`}
         _hover={{
           bg: "accent.100",
         }}
