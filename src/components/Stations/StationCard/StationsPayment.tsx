@@ -18,7 +18,7 @@ import {
 import appStateStore from "../../../store/CommonStore/appStateStore";
 import createSelectors from "../../../store/createSelectors";
 import "react-credit-cards/es/styles-compiled.css";
-import Cards from "react-credit-cards";
+import Cards, { Focused } from "react-credit-cards";
 import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 interface CheckoutFormProps {
@@ -94,7 +94,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                   expiry={cardDetails.expiry}
                   name={cardDetails.name}
                   number={cardDetails.number}
-                  focused={focus}
+                  focused={focus as Focused}
                 />
                 <Input
                   type="tel"

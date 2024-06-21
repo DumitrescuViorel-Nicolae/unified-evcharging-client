@@ -13,7 +13,7 @@ function Footer() {
             &copy; {new Date().getFullYear()} Unified Charging Stations. All
             rights reserved.
           </Text>
-          <Flex mr={120} gap={3}>
+          <Flex color={"accent.100"} mr={120} gap={3}>
             <Link href="#">Contact</Link>
             <Link href="#">FAQ</Link>
             <Link href="#">Partners</Link>

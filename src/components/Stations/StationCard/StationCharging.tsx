@@ -21,7 +21,17 @@ import appStateStore from "../../../store/CommonStore/appStateStore";
 import createSelectors from "../../../store/createSelectors";
 import evStationStore from "../../../store/EVStationStore/evStationStore";
 
-const StationCharging = ({ onClose, onOpen, isOpen }) => {
+interface StationChargingProps {
+  onClose: () => void; // Add a type annotation for onClose
+  onOpen: () => void;
+  isOpen: boolean;
+}
+
+const StationCharging: React.FC<StationChargingProps> = ({
+  onClose,
+  onOpen,
+  isOpen,
+}) => {
   const [selectedTime, setSelectedTime] = useState(moment());
   const [dayOption, setDayOption] = useState("today");
 
@@ -65,11 +75,12 @@ const StationCharging = ({ onClose, onOpen, isOpen }) => {
               <Card mr={4}>
                 <CardBody textAlign={"center"}>
                   <Flex alignItems="center">
-                    <Text w={"18rem"}> I need my vehicle </Text>
+                    <Text w={"9rem"}> I need my vehicle </Text>
                     <Select
                       value={dayOption}
                       onChange={handleDayOptionChange}
                       mx={2}
+                      w={"7rem"}
                     >
                       <option value="today">today</option>
                       <option value="tomorrow">tomorrow</option>
