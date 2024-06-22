@@ -18,17 +18,18 @@ import {
   ModalFooter,
   useDisclosure,
   Flex,
-  Spacer,
   Grid,
 } from "@chakra-ui/react";
 import { EVStation } from "../../../interfaces/EVStation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import createSelectors from "../../../store/createSelectors";
 import CheckoutForm from "./StationsPayment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import ConnectorStatus from "./ConnectorStatus";
 import accountStore from "../../../store/UserStore/accountStore";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 
 interface StationCardProps {
   station: EVStation;
@@ -44,9 +45,26 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
 
   const useAccountStore = createSelectors(accountStore);
   const userLocation = useAccountStore.use.geolocation();
+  const saveToLocalStorage = useAccountStore.use.saveFavoriteLocation();
+  const savedLocations = useAccountStore.use.savedLocations();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
+
+  const [liked, setLiked] = useState<boolean | undefined>(false); // State to track if station is liked
+
+  const toggleLiked = () => {
+    setLiked(!liked);
+    saveToLocalStorage(station);
+  };
+
+  useEffect(() => {
+    // Check if the station is in savedLocations to determine if it's liked
+    const isLiked = savedLocations?.some(
+      (savedStation) => savedStation.stationID === station.stationID
+    );
+    setLiked(isLiked);
+  }, [savedLocations, station]);
 
   const onPay = () => {
     onOpen();
@@ -59,13 +77,25 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         bg={colorScheme.bg}
         border="1px"
         borderColor={colorScheme.border}
+        position="relative" // Ensure the card is relatively positioned
       >
+        <Box position="absolute" top="0" right="0">
+          <Button p={0} onClick={toggleLiked} bg={"accent.100"}>
+            {liked ? (
+              <FaHeart fontSize={30} />
+            ) : (
+              <CiHeart color="primary.600" fontSize={40} />
+            )}
+          </Button>
+        </Box>
         <CardBody>
-          <Image
-            src={import.meta.env.VITE_PLACEHOLDER_IMAGE}
-            alt="Station Image"
-            borderRadius="lg"
-          />
+          <Flex justify="space-between" align="center">
+            <Image
+              src={import.meta.env.VITE_PLACEHOLDER_IMAGE}
+              alt="Station Image"
+              borderRadius="lg"
+            />
+          </Flex>
           <Flex mt="6" justify="space-between" align="flex-start">
             <Heading size="md" color={colorScheme.text}>
               {station.brand}
@@ -79,7 +109,6 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
                 {`${station.totalNumberOfConnectors}/${station.totalNumberOfConnectors}`}{" "}
                 Connectors
               </Text>
-              <Spacer className="m-2" />
             </Stack>
           </Flex>
           <Flex justify={"space-between"}>

@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import Footer from "./components/Footer/Footer";
 import ContactUsForm from "./components/Footer/Contact";
 import FrequestQuestions from "./components/Footer/FAQ";
+import { LikedLocations } from "./components/Account/LikedLocations";
 
 const colors = {
   primary: {
@@ -43,10 +44,12 @@ const theme = extendTheme({
 function App() {
   const useAccountStore = createSelectors(accountStore);
   const getUserLocation = useAccountStore.use.getGeolocation();
+  const getSavedLocations = useAccountStore.use.getSavedLocations();
 
   useEffect(() => {
     getUserLocation();
-  }, [getUserLocation]);
+    getSavedLocations();
+  }, [getSavedLocations, getUserLocation]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -60,6 +63,7 @@ function App() {
               <Route path="/manage-stations" element={<ManageEVStations />} />
               <Route path="/history" element={<History />} />
               <Route path="/account" element={<AccountDetails />} />
+              <Route path="/liked" element={<LikedLocations />} />
               <Route path="/session" element={<AccountDetails />} />
               <Route path="/map" element={<MapGL />} />
               <Route path="/contact" element={<ContactUsForm />} />

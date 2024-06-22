@@ -6,18 +6,23 @@ import appStateStore from "../CommonStore/appStateStore";
 import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
 import { CompanyDetails } from "../../interfaces/RegistrationFormData";
+import { EVStation } from "../../interfaces/EVStation";
 
 export interface AccountStore {
   user: User;
   wallet: number;
+  geolocation: Coordinates | null;
+  company: CompanyDetails | null;
+  savedLocations: EVStation[] | null;
+
   getUser: (email: string) => void;
   setUser: (user: User) => void;
   clearUser: () => void;
-  geolocation: Coordinates | null;
   getGeolocation: () => void;
-  company: CompanyDetails | null;
   getCompany: () => void;
   getUserFromLocalStorage: () => User;
+  getSavedLocations: () => void;
+  saveFavoriteLocation: (station: EVStation) => void;
 }
 
 const accountStore = createStore<AccountStore>((set) => ({
@@ -31,6 +36,7 @@ const accountStore = createStore<AccountStore>((set) => ({
     loading: false,
     error: null,
   },
+  savedLocations: [],
   wallet: 0,
   company: null,
   geolocation: null,
@@ -119,6 +125,37 @@ const accountStore = createStore<AccountStore>((set) => ({
     } catch (error) {
       handleAxiosError(error);
     }
+  },
+
+  saveFavoriteLocation: (station: EVStation) => {
+    const savedLocations: EVStation[] = JSON.parse(
+      localStorage.getItem("savedLocations") || "[]"
+    );
+
+    const existingIndex = savedLocations.findIndex(
+      (savedStation) => savedStation.stationID === station.stationID
+    );
+
+    if (existingIndex === -1) {
+      // Station not saved, add it
+      savedLocations.push(station);
+      toast.success(`Added ${station.brand} to favorites.`);
+    } else {
+      // Station already saved, remove it
+      savedLocations.splice(existingIndex, 1);
+      toast.success(`Removed ${station.brand} from favorites.`);
+    }
+
+    localStorage.setItem("savedLocations", JSON.stringify(savedLocations));
+    set({ savedLocations });
+  },
+
+  getSavedLocations: () => {
+    const savedLocations: EVStation[] = JSON.parse(
+      localStorage.getItem("savedLocations") || "[]"
+    );
+
+    set({ savedLocations: savedLocations });
   },
 
   getGeolocation: () => {

@@ -44,7 +44,7 @@ const UserStateCases: React.FC<UserStateCasesProps> = ({ isLoggedIn }) => {
               User Details
             </MenuItem>
           </Link>
-          <Link to="/">
+          <Link to="/liked">
             <MenuItem icon={<BiHeart fontSize={"1.5rem"} />}>
               Saved Locations
             </MenuItem>
