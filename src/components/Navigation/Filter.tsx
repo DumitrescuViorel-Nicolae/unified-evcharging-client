@@ -1,5 +1,13 @@
 import { useMemo, useState } from "react";
-import { Text, Select, Input, Button, Collapse, Flex } from "@chakra-ui/react";
+import {
+  Text,
+  Select,
+  Input,
+  Button,
+  Collapse,
+  Flex,
+  Box,
+} from "@chakra-ui/react";
 import { FilterValues } from "../../interfaces/FilterValues";
 import createSelectors from "../../store/createSelectors";
 import evStationStore from "../../store/EVStationStore/evStationStore";
@@ -9,12 +17,16 @@ interface FilterProps {
 }
 
 const Filter: React.FC<FilterProps> = () => {
-  const [filters, setFilters] = useState<FilterValues>({});
+  const [filters, setFilters] = useState<FilterValues | null>({});
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const useEVStationStore = createSelectors(evStationStore);
   const getTypes = useEVStationStore.use.getConnectorTypes();
+  const clearFiltersInStore = useEVStationStore.use.clearFilters();
+  const filterEvStations = useEVStationStore.use.filterEVStations();
+
   const types = useEVStationStore.use.connectorTypes();
+  const brands = useEVStationStore.use.brands();
 
   // LOCAL STATE
   useMemo(() => {
@@ -33,14 +45,23 @@ const Filter: React.FC<FilterProps> = () => {
   };
 
   const handleApplyFilters = () => {
-    console.log(filters);
+    console.log("filters in filter", filters);
+    setFilters(filters);
+    filterEvStations(filters);
+  };
+
+  const clearFilters = () => {
+    setFilters({});
+    clearFiltersInStore();
   };
 
   const handleShowNearMe = () => {
     setFilters((prevFilters) => ({
       ...prevFilters,
+      distance: undefined,
       showNearMe: true,
     }));
+    filterEvStations(filters);
   };
 
   return (
@@ -74,33 +95,42 @@ const Filter: React.FC<FilterProps> = () => {
               placeholder="Select connector type"
               name="connectorType"
               onChange={handleChange}
-              w={"xl"}
+              w={"20rem"}
               color={"complementary.300"}
               bg={"primary.600"}
+              value={filters?.connectorType || ""}
             >
               {types.map((type) => (
-                <option value={type.id}>{type.description}</option>
+                <option value={type.description}>{type.description}</option>
               ))}
             </Select>
+
             <Select
-              placeholder="Brand"
+              placeholder="Select a brand"
               name="brand"
               onChange={handleChange}
               ml={1}
+              w={"20rem"}
+              color={"complementary.300"}
+              bg={"primary.600"}
+              value={filters?.brand || ""}
             >
-              {/* Options for brand */}
+              {brands.map((brand) => (
+                <option value={brand.description}>{brand.description}</option>
+              ))}
             </Select>
             <Input
-              type="text"
+              type="number"
               name="distance"
-              placeholder="Distance"
+              placeholder="Remaining Range"
+              w={"20rem"}
               onChange={handleChange}
               ml={1}
+              color={"complementary.300"}
+              bg={"primary.600"}
+              value={filters?.distance || ""}
             />
           </Flex>
-          <Button onClick={handleApplyFilters} bg="accent.100" ml={4}>
-            Apply
-          </Button>
           <Button
             variant="solid"
             onClick={handleShowNearMe}
@@ -109,6 +139,14 @@ const Filter: React.FC<FilterProps> = () => {
           >
             Show Near Me
           </Button>
+          <Box ml={6}>
+            <Button w={"5rem"} onClick={handleApplyFilters} bg="accent.100">
+              Apply
+            </Button>
+            <Button w={"5rem"} onClick={clearFilters} bg="accent.100" ml={2}>
+              Clear
+            </Button>
+          </Box>
         </Flex>
       </Collapse>
     </Flex>

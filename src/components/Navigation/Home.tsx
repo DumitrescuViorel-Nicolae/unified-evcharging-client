@@ -14,7 +14,7 @@ export const HomePage = () => {
 
   // USING
   const getEVStations = useEVStationStore.use.getEVStation();
-  const evStations = useEVStationStore.use.evStations();
+  const evStations = useEVStationStore.use.evStationsToView();
   const useAccountStore = createSelectors(accountStore);
   const userLocation = useAccountStore.use.geolocation();
 
