@@ -16,6 +16,7 @@ import Footer from "./components/Footer/Footer";
 import ContactUsForm from "./components/Footer/Contact";
 import FrequestQuestions from "./components/Footer/FAQ";
 import { LikedLocations } from "./components/Account/LikedLocations";
+import Wallet from "./components/Account/Wallet";
 
 const colors = {
   primary: {
@@ -63,6 +64,7 @@ function App() {
               <Route path="/manage-stations" element={<ManageEVStations />} />
               <Route path="/history" element={<History />} />
               <Route path="/account" element={<AccountDetails />} />
+              <Route path="/wallet" element={<Wallet />} />
               <Route path="/liked" element={<LikedLocations />} />
               <Route path="/session" element={<AccountDetails />} />
               <Route path="/map" element={<MapGL />} />

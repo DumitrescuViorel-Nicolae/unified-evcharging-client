@@ -1,7 +1,7 @@
 import { Image, Button, Flex } from "@chakra-ui/react";
 import Login from "../Account/Login";
 import logo from "../../assets/logo.png";
-import UserStateCases from "./UserStateCases";
+import UserStateCases from "../Account/UserStateCases";
 import createSelectors from "../../store/createSelectors";
 import authStore from "../../store/UserStore/authStore";
 import { Link } from "react-router-dom";
