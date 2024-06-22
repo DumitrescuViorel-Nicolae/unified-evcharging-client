@@ -132,8 +132,8 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
                     </Badge>
                     <Text>{connector.connectorType} Socket</Text>
                   </Stack>
-                  <Text>Charge Capacity: {connector.chargeCapacity}</Text>
-                  <Text>Max Power Level: {connector.maxPowerLevel}kW</Text>
+                  <Text>{connector.chargeCapacity}</Text>
+                  <Text>{connector.maxPowerLevel}kW</Text>
                   <Text my={2} fontWeight={"bold"}>
                     Price: {connector.price} RON/kWh
                   </Text>

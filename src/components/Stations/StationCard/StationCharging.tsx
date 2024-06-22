@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardBody,
@@ -14,37 +15,37 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Datetime from "react-datetime";
+import { MdOutlineSpeed, MdOutlineEnergySavingsLeaf } from "react-icons/md";
 import "react-datetime/css/react-datetime.css";
-import { useState } from "react";
-import moment from "moment";
+import { ChangeEvent, useState } from "react";
+import moment, { Moment } from "moment";
 import appStateStore from "../../../store/CommonStore/appStateStore";
 import createSelectors from "../../../store/createSelectors";
 import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 interface StationChargingProps {
   onClose: () => void; // Add a type annotation for onClose
-  onOpen: () => void;
   isOpen: boolean;
 }
 
 const StationCharging: React.FC<StationChargingProps> = ({
   onClose,
-  onOpen,
   isOpen,
 }) => {
-  const [selectedTime, setSelectedTime] = useState(moment());
+  const [selectedTime, setSelectedTime] = useState<Moment | string>(moment());
   const [dayOption, setDayOption] = useState("today");
+  const [paymentSum, setPaymentSum] = useState<number>(0);
 
   const useEVStationStore = createSelectors(evStationStore);
   const selectedDetail = useEVStationStore.use.selectedConnector();
 
   console.log("first", selectedDetail);
 
-  const handleTimeChange = (time) => {
+  const handleTimeChange = (time: Moment | string) => {
     setSelectedTime(time);
   };
 
-  const handleDayOptionChange = (event) => {
+  const handleDayOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setDayOption(event.target.value);
   };
 
@@ -52,13 +53,35 @@ const StationCharging: React.FC<StationChargingProps> = ({
     const currentTime = moment();
     const chosenTime = moment(selectedTime);
     if (dayOption === "tomorrow") {
-      chosenTime.add(1, "days");
+      // handle occupation logic
     }
     const differenceInMinutes = chosenTime.diff(currentTime, "minutes");
     return differenceInMinutes;
   };
 
-  const calculatePayment = () => {};
+  const calculateRangeAdded = () => {
+    const chargingPower = selectedDetail?.maxPowerLevel || 0;
+    const chargingTime = calculateTimeDifference() / 60;
+    const estimatedEnergyConsumtion = 0.186; // kWh/km
+
+    if (chargingTime > 0) {
+      const rangeAdded =
+        (chargingPower * chargingTime) / estimatedEnergyConsumtion;
+
+      return `${rangeAdded.toFixed(2)} km`;
+    } else return `${0} km`;
+  };
+
+  const calculatePayment = () => {
+    const chargingPower = selectedDetail?.maxPowerLevel || 0;
+    const chargingTime = calculateTimeDifference() / 60;
+
+    if (chargingTime > 0) {
+      const energyConsumedFromStation = chargingPower * chargingTime;
+
+      return `${energyConsumedFromStation.toFixed(2)} kWh`;
+    } else return `${0} kWh`;
+  };
 
   const useAppStateStore = createSelectors(appStateStore);
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
@@ -80,7 +103,7 @@ const StationCharging: React.FC<StationChargingProps> = ({
                       value={dayOption}
                       onChange={handleDayOptionChange}
                       mx={2}
-                      w={"7rem"}
+                      w={"8rem"}
                     >
                       <option value="today">today</option>
                       <option value="tomorrow">tomorrow</option>
@@ -98,25 +121,68 @@ const StationCharging: React.FC<StationChargingProps> = ({
                   </Flex>
                 </CardBody>
               </Card>
+
               <Card>
                 <CardBody>
-                  <Text fontSize={"xl"}>Summary</Text>
-                  <Text fontSize={"medium"}>{selectedDetail?.price}</Text>
+                  <Text
+                    textAlign={"center"}
+                    fontWeight={"semibold"}
+                    mb={4}
+                    fontSize={"xl"}
+                  >
+                    Summary
+                  </Text>
+                  <Flex direction={"column"}>
+                    {" "}
+                    <Box display={"inline-flex"} alignItems={"center"} mb={3}>
+                      <MdOutlineSpeed fontSize={25} className="mr-2" />
+                      <Text fontSize={"medium"}>
+                        Estimated range added:{" "}
+                        <span className="ml-2 font-semibold">
+                          {calculateRangeAdded()}
+                        </span>
+                      </Text>
+                    </Box>
+                    <Box display={"inline-flex"} alignItems={"center"}>
+                      <MdOutlineEnergySavingsLeaf
+                        fontSize={25}
+                        className="mr-2"
+                      />
+                      <Text fontSize={"medium"}>
+                        Energy consumed:{" "}
+                        <span className="ml-2 font-semibold">
+                          {calculatePayment()}
+                        </span>
+                      </Text>
+                    </Box>
+                  </Flex>
                 </CardBody>
               </Card>
             </Flex>
-            <Button
-              w={"15rem"}
-              mt={3}
-              bg={"accent.100"}
-              onClick={() => {
-                const timeDifference = calculateTimeDifference();
-                console.log(`Time difference in minutes: ${timeDifference}`);
-                setIsOpen(true);
-              }}
-            >
-              Start Charging
-            </Button>
+
+            <Flex>
+              <Button
+                w={"15rem"}
+                mt={10}
+                mr={2}
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                Report a problem
+              </Button>
+
+              <Button
+                w={"15rem"}
+                mt={10}
+                bg={"accent.100"}
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                Start Charging
+              </Button>
+            </Flex>
           </Flex>
         </ModalBody>
         <ModalFooter>

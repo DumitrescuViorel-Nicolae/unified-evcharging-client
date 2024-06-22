@@ -35,15 +35,15 @@ export const HomePage = () => {
   };
 
   const subtlePulse = keyframes`
-  0% {
-    box-shadow: 0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 20px #32CD32;
-  }
-  50% {
-    box-shadow: 0 0 10px #32CD32, 0 0 20px #32CD32, 0 0 30px #32CD32;
-  }
-  100% {
-    box-shadow: 0 0 5px #32CD32, 0 0 10px #32CD32, 0 0 20px #32CD32;
-  }
+0% {
+  box-shadow: 0 0 10px #32CD32, 0 0 20px #32CD32, 0 0 30px #32CD32;
+}
+50% {
+  box-shadow: 0 0 20px #32CD32, 0 0 30px #32CD32, 0 0 40px #32CD32;
+}
+100% {
+  box-shadow: 0 0 10px #32CD32, 0 0 20px #32CD32, 0 0 30px #32CD32;
+}
 `;
 
   return (

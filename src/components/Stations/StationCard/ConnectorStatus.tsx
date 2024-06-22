@@ -25,7 +25,11 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
         return (
           <Flex flexDirection={"column"} justifyContent={"center"}>
             {" "}
-            <Text textAlign={"center"} textColor={"#1CB722"}>
+            <Text
+              fontWeight={"bold"}
+              textAlign={"center"}
+              textColor={"#1CB722"}
+            >
               Status: Available
             </Text>
             <Button
@@ -44,7 +48,11 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
       case "OCCUPIED":
         return (
           <Flex flexDirection={"column"} justifyContent={"center"}>
-            <Text textAlign={"center"} textColor={"#FB1C1C"}>
+            <Text
+              fontWeight={"bold"}
+              textAlign={"center"}
+              textColor={"#FB1C1C"}
+            >
               Status: Occupied
             </Text>
             <Button my={2} isDisabled={true}>
@@ -56,7 +64,11 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
       case "OUT_OF_SERVICE":
         return (
           <Flex flexDirection={"column"} justifyContent={"center"}>
-            <Text textColor={"#B3BF1C"} textAlign={"center"}>
+            <Text
+              fontWeight={"bold"}
+              textColor={"#B3BF1C"}
+              textAlign={"center"}
+            >
               Status: Out of service
             </Text>
             <Button my={2} isDisabled={true}>
@@ -78,7 +90,7 @@ const ConnectorStatusComponent: React.FC<ConnectorStatusProps> = ({
         </Text>
         {interpretStatus(status.state)}
       </Box>
-      <StationCharging isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <StationCharging isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

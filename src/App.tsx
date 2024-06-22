@@ -12,7 +12,9 @@ import MapGL from "./components/Map/Map";
 import createSelectors from "./store/createSelectors";
 import accountStore from "./store/UserStore/accountStore";
 import { useEffect } from "react";
-import Footer from "./components/Navigation/Footer";
+import Footer from "./components/Footer/Footer";
+import ContactUsForm from "./components/Footer/Contact";
+import FrequestQuestions from "./components/Footer/FAQ";
 
 const colors = {
   primary: {
@@ -60,6 +62,8 @@ function App() {
               <Route path="/account" element={<AccountDetails />} />
               <Route path="/session" element={<AccountDetails />} />
               <Route path="/map" element={<MapGL />} />
+              <Route path="/contact" element={<ContactUsForm />} />
+              <Route path="/faq" element={<FrequestQuestions />} />
             </Routes>
           </Box>
           <Footer />

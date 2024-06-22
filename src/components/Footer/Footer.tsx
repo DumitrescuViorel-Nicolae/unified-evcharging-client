@@ -1,4 +1,5 @@
-import { Box, Container, Text, Link, Flex } from "@chakra-ui/react";
+import { Box, Container, Text, Flex } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -14,9 +15,9 @@ function Footer() {
             rights reserved.
           </Text>
           <Flex color={"accent.100"} mr={120} gap={3}>
-            <Link href="#">Contact</Link>
-            <Link href="#">FAQ</Link>
-            <Link href="#">Partners</Link>
+            <Link to="/contact">Contact</Link>
+            <Link to="/faq">FAQ</Link>
+            <Link to="#">Partners</Link>
           </Flex>
         </Flex>
       </Container>
