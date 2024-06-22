@@ -105,7 +105,7 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       }
 
       if (filters?.showNearMe) {
-        const nearMeDistanceThreshold = 2;
+        const nearMeDistanceThreshold = 4;
 
         if (station.distance > nearMeDistanceThreshold) {
           return false;

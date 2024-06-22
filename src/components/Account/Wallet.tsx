@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import {
   Box,
   Button,
@@ -20,21 +20,53 @@ import {
   StatHelpText,
   StatArrow,
 } from "@chakra-ui/react";
-import Cards from "react-credit-cards";
+import Cards, { Focused } from "react-credit-cards";
 import "react-credit-cards/es/styles-compiled.css";
 
 const Wallet: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false);
+  const [cardDetails, setCardDetails] = useState({
+    cvc: "",
+    expiry: "",
+    name: "",
+    number: "",
+  });
+  const [focus, setFocus] = useState<string>("");
 
-  const currentBalance = 500; // Example current balance
+  const currentBalance = 100; // Example current balance
   const totalSpent = 200; // Example total amount spent
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
+  const handleOrderModalOpen = () => {
+    setIsOrderModalOpen(true);
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
+  const handleOrderModalClose = () => {
+    setIsOrderModalOpen(false);
+  };
+
+  const handleAddFundsModalOpen = () => {
+    setIsAddFundsModalOpen(true);
+  };
+
+  const handleAddFundsModalClose = () => {
+    setIsAddFundsModalOpen(false);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCardDetails((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setFocus(e.target.name);
+  };
+
+  const handleAddFundsSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Add your logic for handling the add funds form submission here
+    console.log("Card Details:", cardDetails);
+    setIsAddFundsModalOpen(false);
   };
 
   return (
@@ -56,7 +88,7 @@ const Wallet: React.FC = () => {
               cvc=""
               expiry=""
               name="Your Wallet"
-              number={currentBalance.toString()}
+              number={"500"}
               focused=""
             />
           </Box>
@@ -73,19 +105,29 @@ const Wallet: React.FC = () => {
           </Stat>
         </Box>
       </Flex>
-      <Button
-        mt={6}
-        onClick={handleModalOpen}
-        textAlign={"center"}
-        bg={"accent.100"}
-        w={"10rem"}
-        ml={"60rem"}
-      >
-        Order RFID Card
-      </Button>
+      <Flex ml={"55rem"} gap={3}>
+        <Button
+          mt={6}
+          onClick={handleOrderModalOpen}
+          textAlign={"center"}
+          bg={"accent.100"}
+          w={"10rem"}
+        >
+          Order RFID Card
+        </Button>
+        <Button
+          mt={6}
+          onClick={handleAddFundsModalOpen}
+          textAlign={"center"}
+          bg={"accent.100"}
+          w={"10rem"}
+        >
+          Add funds
+        </Button>
+      </Flex>
 
       {/* Modal for ordering RFID card */}
-      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+      <Modal isOpen={isOrderModalOpen} onClose={handleOrderModalClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Order RFID Card</ModalHeader>
@@ -95,16 +137,87 @@ const Wallet: React.FC = () => {
               To get started with your RFID card, please provide your details
               below
             </Text>
-            {/* Example input fields */}
             <Input mb={3} placeholder="Full Name" />
             <Input mb={3} placeholder="Email Address" type="email" />
           </ModalBody>
-
           <ModalFooter>
             <Button bg={"accent.100"} mr={3}>
               Order
             </Button>
-            <Button variant="ghost" onClick={handleModalClose}>
+            <Button variant="ghost" onClick={handleOrderModalClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Modal for adding funds */}
+      <Modal isOpen={isAddFundsModalOpen} onClose={handleAddFundsModalClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Funds</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box as="form" onSubmit={handleAddFundsSubmit}>
+              <Flex direction="column" align="center">
+                <Cards
+                  cvc={cardDetails.cvc}
+                  expiry={cardDetails.expiry}
+                  name={cardDetails.name}
+                  number={cardDetails.number}
+                  focused={focus as Focused}
+                />
+                <Input
+                  mt={4}
+                  type="tel"
+                  name="number"
+                  placeholder="Card Number"
+                  value={cardDetails.number}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  maxLength={16}
+                  required
+                />
+                <Input
+                  mt={4}
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={cardDetails.name}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  required
+                />
+                <Input
+                  mt={4}
+                  type="tel"
+                  name="expiry"
+                  placeholder="MM/YY"
+                  value={cardDetails.expiry}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  maxLength={5}
+                  required
+                />
+                <Input
+                  mt={4}
+                  type="tel"
+                  name="cvc"
+                  placeholder="CVC"
+                  value={cardDetails.cvc}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  maxLength={3}
+                  required
+                />
+                <Button type="submit" mt={4} bg={"accent.100"}>
+                  Add Funds
+                </Button>
+              </Flex>
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="ghost" onClick={handleAddFundsModalClose}>
               Close
             </Button>
           </ModalFooter>

@@ -10,7 +10,7 @@ import { EVStation } from "../../interfaces/EVStation";
 
 export interface AccountStore {
   user: User;
-  wallet: number;
+  paymentSum: number;
   geolocation: Coordinates | null;
   company: CompanyDetails | null;
   savedLocations: EVStation[] | null;
@@ -23,6 +23,7 @@ export interface AccountStore {
   getUserFromLocalStorage: () => User;
   getSavedLocations: () => void;
   saveFavoriteLocation: (station: EVStation) => void;
+  setPaymentSum: (sum: number) => void;
 }
 
 const accountStore = createStore<AccountStore>((set) => ({
@@ -37,7 +38,7 @@ const accountStore = createStore<AccountStore>((set) => ({
     error: null,
   },
   savedLocations: [],
-  wallet: 0,
+  paymentSum: 0,
   company: null,
   geolocation: null,
   setUser: async (user) => {
@@ -156,6 +157,10 @@ const accountStore = createStore<AccountStore>((set) => ({
     );
 
     set({ savedLocations: savedLocations });
+  },
+
+  setPaymentSum: (sum: number) => {
+    set({ paymentSum: sum });
   },
 
   getGeolocation: () => {

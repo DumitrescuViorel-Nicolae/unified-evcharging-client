@@ -47,6 +47,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
   const userLocation = useAccountStore.use.geolocation();
   const saveToLocalStorage = useAccountStore.use.saveFavoriteLocation();
   const savedLocations = useAccountStore.use.savedLocations();
+  const amount = useAccountStore.use.paymentSum();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
@@ -189,7 +190,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
       <Elements stripe={stripePromise}>
         <CheckoutForm
           evStationStripeAccountId={station.stripeAccountID}
-          amount={2}
+          amount={amount}
         />
       </Elements>
     </>
