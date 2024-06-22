@@ -1,4 +1,5 @@
 import { createStore } from "zustand";
+import accountStore from "../UserStore/accountStore";
 
 export interface AppStateStore {
   isLoading: boolean | null;
@@ -29,6 +30,9 @@ const appStateStore = createStore<AppStateStore>((set) => ({
 
   isPaymentModalOpen: false,
   setIsPaymentModalOpen: (open) => {
+    if (open === false) {
+      accountStore.getState().setPaymentSum(0);
+    }
     set({ isPaymentModalOpen: open });
   },
 
