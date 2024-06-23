@@ -115,8 +115,6 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       return true;
     };
 
-    console.log(values);
-
     const filteredStations = evStationStore
       .getState()
       .evStations.filter((station) => applyFilters(station, values));
@@ -141,7 +139,19 @@ const evStationStore = createStore<EVStationStore>((set) => ({
   getConnectorTypes: async () => {
     try {
       const response = await axiosInstance.get("/EVStation/getEVConnectorType");
-      set({ connectorTypes: [...new Set<Option>(response.data)] });
+      // Extract the descriptions from the data
+      const descriptions = response.data.map((item) => item.description);
+
+      // Remove duplicate descriptions
+      const uniqueDescriptions = Array.from(new Set(descriptions));
+
+      // Map the unique descriptions to the desired structure
+      const types: Option[] = uniqueDescriptions.map((description, index) => ({
+        id: index + 1, // Assuming id starts from 1
+        description: description,
+      }));
+
+      set({ connectorTypes: types });
     } catch (error) {
       handleAxiosError(error);
     }

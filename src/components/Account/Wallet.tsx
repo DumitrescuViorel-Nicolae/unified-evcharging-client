@@ -81,7 +81,7 @@ const Wallet: React.FC = () => {
             Current Balance
           </Text>
           <Text fontSize="2xl" color="teal.500">
-            ${currentBalance.toFixed(2)}
+            lei{currentBalance.toFixed(2)}
           </Text>
           <Box mt={4}>
             <Cards
@@ -96,7 +96,7 @@ const Wallet: React.FC = () => {
         <Box textAlign="center" mr={"30rem"}>
           <Stat fontSize="2xl">
             <StatLabel fontSize="2xl">Total spent</StatLabel>
-            <StatNumber fontSize="2xl">$20</StatNumber>
+            <StatNumber fontSize="2xl">lei20</StatNumber>
             <StatHelpText fontSize="xl">Feb 12 - Feb 28</StatHelpText>
             <StatHelpText fontSize="xl">
               <StatArrow type="increase" />

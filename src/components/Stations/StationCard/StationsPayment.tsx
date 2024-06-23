@@ -135,7 +135,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
                   maxLength={3}
                   required
                 />
-                <Button type="submit">Pay ${amount}</Button>
+                <Button type="submit">Pay lei{amount}</Button>
               </VStack>
             </Box>
           )}
