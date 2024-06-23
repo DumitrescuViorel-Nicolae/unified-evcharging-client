@@ -140,7 +140,9 @@ const evStationStore = createStore<EVStationStore>((set) => ({
     try {
       const response = await axiosInstance.get("/EVStation/getEVConnectorType");
       // Extract the descriptions from the data
-      const descriptions = response.data.map((item) => item.description);
+      const descriptions: string[] = response.data.map(
+        (item) => item.description
+      );
 
       // Remove duplicate descriptions
       const uniqueDescriptions = Array.from(new Set(descriptions));
