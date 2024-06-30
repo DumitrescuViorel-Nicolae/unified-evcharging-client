@@ -23,13 +23,10 @@ import evStationStore from "../../../store/EVStationStore/evStationStore";
 
 interface CheckoutFormProps {
   amount: number;
-  evStationStripeAccountId: string;
+  company: string;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({
-  amount,
-  evStationStripeAccountId,
-}) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ amount, company }) => {
   const useAppStateStore = createSelectors(appStateStore);
   const useEvStationStore = createSelectors(evStationStore);
 
@@ -68,7 +65,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
       alert("Please fill in all card details.");
       return;
     }
-    processPayment(evStationStripeAccountId);
+    processPayment(company);
     setIsOpen(false);
   };
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Table,
   Thead,
@@ -36,7 +36,8 @@ import AddStationModal from "./StationManagement/AddStation/AddStationModal";
 
 const ManageEVStations = () => {
   const useEVStore = createSelectors(evStationStore);
-  const evStations = useEVStore.use.evStations();
+  const getEVStationPerCompany = useEVStore.use.getEVStationPerCompany();
+  const evStations = useEVStore.use.evStationsPerCompany();
 
   const useAppState = createSelectors(appStateStore);
   const isAddStationModalOpen = useAppState.use.isAddStationModalOpen();
@@ -69,6 +70,10 @@ const ManageEVStations = () => {
   const handleOpenAlert = () => {
     setIsAddStationModalOpen(true);
   };
+
+  useEffect(() => {
+    getEVStationPerCompany();
+  }, []);
 
   return (
     <>

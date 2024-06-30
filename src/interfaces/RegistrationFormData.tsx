@@ -19,5 +19,5 @@ export interface CompanyDetails {
   country?: string;
   city?: string;
   streetName?: string;
-  zip?: string;
+  zipCode?: string;
 }

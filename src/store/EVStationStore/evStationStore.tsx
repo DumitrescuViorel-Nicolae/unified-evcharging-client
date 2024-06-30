@@ -14,6 +14,7 @@ import { FilterValues } from "../../interfaces/FilterValues";
 export interface EVStationStore {
   evStations: EVStation[];
   evStationsToView: EVStation[];
+  evStationsPerCompany: EVStation[];
   selectedConnector: ConnectorDetail | null;
   transactions: PaymentTransaction[] | [];
   directions: any;
@@ -21,13 +22,14 @@ export interface EVStationStore {
   brands: Option[];
 
   getEVStation: () => void;
+  getEVStationPerCompany: () => void;
   setSelectedConnector: (selectedConnector: ConnectorDetail) => void;
   addEVStation: (evStationToAdd: AddEVStationDTO) => void;
   getTransactions: () => void;
   getConnectorTypes: () => void;
   getBrands: () => void;
   deleteEVStation: (stationID: number) => void;
-  makePayment: (stripeAccountId: string) => void;
+  makePayment: (companyName: string) => void;
   getDirectionToStation: (start: Coordinates, end: Coordinates) => void;
   clearFilters: () => void;
   filterEVStations: (values: FilterValues | null) => void;
@@ -36,6 +38,7 @@ export interface EVStationStore {
 const evStationStore = createStore<EVStationStore>((set) => ({
   evStations: [],
   evStationsToView: [],
+  evStationsPerCompany: [],
   selectedConnector: null,
   connectorTypes: [],
   brands: [],
@@ -62,6 +65,19 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       set({ evStations: mockStations });
       set({ evStationsToView: mockStations });
     }
+  },
+
+  getEVStationPerCompany: async () => {
+    accountStore.getState().getCompany();
+    const companyName = accountStore.getState().company?.companyName;
+
+    const response = await axiosInstance.get(
+      `/EVStation/getStationsPerCompany?companyName=${companyName}`
+    );
+
+    console.log(response);
+
+    set({ evStationsPerCompany: response.data });
   },
 
   setSelectedConnector: (selectedConnector: ConnectorDetail) => {
@@ -174,10 +190,10 @@ const evStationStore = createStore<EVStationStore>((set) => ({
     set({ brands: brands });
   },
 
-  makePayment: async (stripeAccountID) => {
+  makePayment: async (companyName) => {
     try {
       const response = await axiosInstance.post(
-        `/Payment/processEVPayment?stripeAccountID=${stripeAccountID}`
+        `/Payment/processEVPayment?companyName=${companyName}`
       );
 
       if (response.data.success) {

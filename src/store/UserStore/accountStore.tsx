@@ -121,7 +121,9 @@ const accountStore = createStore<AccountStore>((set) => ({
           `/EVStation/getCompanyByUserId?id=${currentUser.id}`
         );
       }
-      const companyDetails = response.data.data;
+      const companyDetails = response.data;
+
+      console.log(response.data);
       set({ company: companyDetails });
     } catch (error) {
       handleAxiosError(error);

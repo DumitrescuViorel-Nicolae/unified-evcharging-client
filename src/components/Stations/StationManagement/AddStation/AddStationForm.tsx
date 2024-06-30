@@ -109,9 +109,10 @@ const AddStationForm: React.FC = () => {
     getCompany();
   }, [getCompany]);
 
+  console.log("name", company);
+
   const onSubmit: SubmitHandler<AddEVStationDTO> = (data) => {
-    //const companyName = company?.companyName;
-    const companyName = "GreenEnergy Inc.";
+    const companyName = company?.companyName;
     const evStationToSubmit = { ...data, companyName: companyName };
     addEVStation(evStationToSubmit);
   };

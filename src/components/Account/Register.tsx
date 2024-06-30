@@ -30,7 +30,7 @@ const schema = yup.object().shape({
     phoneNumber: yup
       .string()
       .matches(
-        /^(\(\d{3}\)\s|\d{3}-)\d{3}-\d{4}$/,
+        /^(\(\d{3}\)?\s?|\d{3}-)\d{3}-\d{4}$/,
         "Phone number is not valid (format: XXX-XXX-XXXX)"
       )
       .required("Phone number is required"),
@@ -46,7 +46,7 @@ const schema = yup.object().shape({
       country: yup.string().optional(),
       city: yup.string().optional(),
       streetName: yup.string().optional(),
-      zip: yup.string().optional(),
+      zipCode: yup.string().optional(),
     })
     .optional(),
 });
@@ -210,11 +210,11 @@ const RegistrationForm = () => {
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.CompanyDetails?.zip} id="zip">
+            <FormControl isInvalid={!!errors.CompanyDetails?.zipCode} id="zip">
               <FormLabel>Zip</FormLabel>
-              <Input type="text" {...register("CompanyDetails.zip")} />
+              <Input type="text" {...register("CompanyDetails.zipCode")} />
               <FormErrorMessage>
-                {errors.CompanyDetails?.zip?.message}
+                {errors.CompanyDetails?.zipCode?.message}
               </FormErrorMessage>
             </FormControl>
           </SimpleGrid>

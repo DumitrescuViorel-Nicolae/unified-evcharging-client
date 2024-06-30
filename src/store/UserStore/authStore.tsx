@@ -48,10 +48,12 @@ const authStore = createStore<AuthState & AuthActions>((set) => ({
 
         sessionStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-      }
 
-      accountStore.getState().getUser(email);
-      toast.success("Logged in");
+        accountStore.getState().getUser(email);
+        toast.success("Logged in");
+      } else {
+        toast.error("Login failed!");
+      }
     } catch (error) {
       handleAxiosError(error);
     }

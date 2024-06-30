@@ -50,7 +50,7 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
   const amount = useAccountStore.use.paymentSum();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
+  //const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_ACCESS_TOKEN);
 
   const [liked, setLiked] = useState<boolean | undefined>(false); // State to track if station is liked
 
@@ -189,12 +189,9 @@ const StationCard: React.FC<StationCardProps> = ({ station }) => {
         </ModalContent>
       </Modal>
 
-      <Elements stripe={stripePromise}>
-        <CheckoutForm
-          evStationStripeAccountId={station.stripeAccountID}
-          amount={amount}
-        />
-      </Elements>
+      {/* <Elements stripe={stripePromise}> */}
+      <CheckoutForm company={station.companyName} amount={amount} />
+      {/* </Elements> */}
     </>
   );
 };

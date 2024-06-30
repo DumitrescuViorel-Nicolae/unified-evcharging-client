@@ -7,14 +7,28 @@ import authStore from "../../store/UserStore/authStore";
 import { Link } from "react-router-dom";
 import Filter from "./Filter";
 import accountStore from "../../store/UserStore/accountStore";
+import { useMemo } from "react";
+import evStationStore from "../../store/EVStationStore/evStationStore";
 
 const NavBar = () => {
   // STORES
   const useAuthStore = createSelectors(authStore);
   const useUserStore = createSelectors(accountStore);
+  const userEVStationsStore = createSelectors(evStationStore);
+
   // USING
   const isLoggendIn = useAuthStore.use.isLoggedIn();
   const user = useUserStore.use.user();
+  const evStationsPerCompanyGet =
+    userEVStationsStore.use.getEVStationPerCompany();
+
+  const isCompanyUser = user?.role === "Company";
+
+  useMemo(() => {
+    if (isCompanyUser) {
+      evStationsPerCompanyGet();
+    }
+  }, [isCompanyUser]);
 
   return (
     <>
@@ -50,7 +64,7 @@ const NavBar = () => {
           <Link to={"/manage-stations"}>
             {" "}
             <Button
-              //hidden={user.role !== "Company"}
+              hidden={!isCompanyUser}
               bg={"accent.100"}
               fontSize="15px"
               mr="8"
