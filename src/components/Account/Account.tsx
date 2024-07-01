@@ -69,7 +69,6 @@ const AccountDetails = () => {
   };
 
   const onSubmit = async (data) => {
-    // Send form data to update user details
     updateUser(data as User);
     setIsEditing(false);
   };

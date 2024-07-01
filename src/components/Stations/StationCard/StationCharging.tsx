@@ -24,6 +24,7 @@ import createSelectors from "../../../store/createSelectors";
 import evStationStore from "../../../store/EVStationStore/evStationStore";
 import ReportProblemModal from "./ReportProblemModal"; // Import the new component
 import accountStore from "../../../store/UserStore/accountStore";
+import authStore from "../../../store/UserStore/authStore";
 
 interface StationChargingProps {
   onClose: () => void;
@@ -90,7 +91,11 @@ const StationCharging: React.FC<StationChargingProps> = ({
   };
 
   const useAppStateStore = createSelectors(appStateStore);
+  const useAuthStore = createSelectors(authStore);
+
+  const isLoggendIn = useAuthStore.use.isLoggedIn();
   const setIsOpen = useAppStateStore.use.setIsPaymentModalOpen();
+  const setIsOpenAuth = useAppStateStore.use.setIsAuthModalOpen();
 
   return (
     <>
@@ -182,7 +187,7 @@ const StationCharging: React.FC<StationChargingProps> = ({
                   mt={10}
                   bg={"accent.100"}
                   onClick={() => {
-                    setIsOpen(true);
+                    isLoggendIn ? setIsOpen(true) : setIsOpenAuth(true);
                   }}
                 >
                   Start Charging

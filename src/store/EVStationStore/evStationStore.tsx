@@ -75,8 +75,6 @@ const evStationStore = createStore<EVStationStore>((set) => ({
       `/EVStation/getStationsPerCompany?companyName=${companyName}`
     );
 
-    console.log(response);
-
     set({ evStationsPerCompany: response.data });
   },
 

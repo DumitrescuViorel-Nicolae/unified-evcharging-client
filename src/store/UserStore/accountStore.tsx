@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Coordinates } from "../../interfaces/Coordinates";
 import { CompanyDetails } from "../../interfaces/RegistrationFormData";
 import { EVStation } from "../../interfaces/EVStation";
+import authStore from "./authStore";
 
 export interface AccountStore {
   user: User;
@@ -142,7 +143,14 @@ const accountStore = createStore<AccountStore>((set) => ({
     if (existingIndex === -1) {
       // Station not saved, add it
       savedLocations.push(station);
-      toast.success(`Added ${station.brand} to favorites.`);
+      if (!authStore.getState().isLoggedIn) {
+        toast.success(
+          `Added ${station.brand} to favorites.
+           Please login to see them available!`
+        );
+      } else {
+        toast.success(`Added ${station.brand} to favorites.`);
+      }
     } else {
       // Station already saved, remove it
       savedLocations.splice(existingIndex, 1);

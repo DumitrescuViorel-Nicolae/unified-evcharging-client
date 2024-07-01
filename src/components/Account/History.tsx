@@ -67,12 +67,7 @@ const History = () => {
               <Td>{transaction.paymentMethodLast4}</Td>
               <Td>{transaction.status}</Td>
               <Td>
-                <Link
-                  color="green"
-                  onClick={() =>
-                    handleTransactionUrlClick(transaction.receiptUrl)
-                  }
-                >
+                <Link color="green" href={transaction.receiptUrl}>
                   {truncateUrl(transaction.receiptUrl)}
                 </Link>
               </Td>
