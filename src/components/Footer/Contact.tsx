@@ -64,7 +64,7 @@ const ContactUsForm: React.FC = () => {
               Contact Information
             </Text>
             <Text>Phone: (123) 456-7890</Text>
-            <Text>Email: info@example.com</Text>
+            <Text>Email: unifiedevcharging@gmail.com</Text>
             <Text>
               We are here to assist you with any questions or concerns you may
               have.
