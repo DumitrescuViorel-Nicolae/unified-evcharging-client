@@ -1,30 +1,15 @@
-# React + TypeScript + Vite
+# Unified EV Charging Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A client application for managing and monitoring electric vehicle charging stations.
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Unified EV Charging Client is a TypeScript-based application designed to provide a seamless interface for managing and monitoring electric vehicle (EV) charging stations. It integrates various features to facilitate the efficient operation of EV charging infrastructure.
 
-## Expanding the ESLint configuration
+Features
+Real-time monitoring of EV charging stations
+User-friendly interface for managing charging sessions
+Detailed reporting and analytics
+Integration with various payment gateways
+Support for multiple languages
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
